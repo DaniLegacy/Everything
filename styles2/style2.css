@@ -1,0 +1,29 @@
+#main-title {
+    color: darkblue;
+}
+
+.highlight {
+    background-color: yellow;
+}
+
+.bg {
+    background-color: aquamarine;
+    font-family:'Courier New', Courier, monospace;
+    font-style: italic;
+}
+
+.bg2 {
+    background-color: purple;
+    font-family:'Courier New', Courier, monospace;
+    font-style: italic;
+    color: white;
+}
+
+p {
+    font-size: 16px;
+}
+
+.small {
+    font-size: 12px;
+    color: red;
+}

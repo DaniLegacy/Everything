@@ -1,0 +1,36 @@
+p {
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    color: #15005f;
+}
+
+.footnote {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    color: #565657;
+}
+
+#main-title {
+    font-family: Arial, sans-serif;
+    font-size: 30px;
+    color: #03d3f8;
+    text-align: center;
+}
+
+.card {
+    padding: 15px;
+    border: 2px solid #4B0082;
+    margin: 20px 0;
+    width: 400px;
+    border-radius: 6px;
+    background-color: #f7e9cb;
+}
+
+.hobby-list {
+    list-style-type: disc;
+    margin: 10px 0;
+    padding-left: 20px;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    color: #15005f;
+}

@@ -1,0 +1,14 @@
+.title {
+    background-color: yellow;
+    color: purple;
+}
+
+p {
+    background-color: magenta;
+    font-family: Arial, sans-serif;
+}
+
+.highlighter {
+    background-color: green;
+    font-family:'Courier New', Courier, monospace;
+}

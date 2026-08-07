@@ -1,0 +1,18 @@
+.section-title {
+    color:purple;
+}
+
+#intro {
+    font-weight: bold;
+}
+
+p {
+    font-size: 14px;
+}
+
+.sporty {
+    font-style: italic;
+    color: #8f96bc;
+    text-decoration: underline;
+    font-weight: bold;
+}
