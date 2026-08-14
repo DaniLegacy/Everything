@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2D Car Racing Game</title>
+  <title>2D Car Racing Game - Power-Ups</title>
   <style>
     body {
       margin: 0;
@@ -37,13 +37,15 @@
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
 
+    const baseSpeed = 5;
+
     // Player car state
     const car = {
       x: 130,
       y: 400,
       width: 40,
       height: 70,
-      speed: 5
+      speed: baseSpeed
     };
 
     // Controls
@@ -51,34 +53,71 @@
     window.addEventListener("keydown", (e) => keys[e.key] = true);
     window.addEventListener("keyup", (e) => keys[e.key] = false);
 
-    // Obstacles & Game Loop Variables
+    // Dynamic Lists & Game State
     let obstacles = [];
+    let powerUps = [];
     let score = 0;
     let gameOver = false;
 
+    // Active Power-Up Effects
+    let scoreMultiplier = 1;
+    let speedBoostTimer = 0;
+    let multiplierTimer = 0;
+
+    const lanes = [30, 130, 230];
+
+    // Spawn Obstacle Cars
     function spawnObstacle() {
-      const lanes = [30, 130, 230];
       const randomLane = lanes[Math.floor(Math.random() * lanes.length)];
       obstacles.push({ x: randomLane, y: -70, width: 40, height: 70, speed: 4 });
     }
 
-    setInterval(() => {
-      if (!gameOver) spawnObstacle();
-    }, 1200);
+    // Spawn Power-Up Items
+    function spawnPowerUp() {
+      const randomLane = lanes[Math.floor(Math.random() * lanes.length)] + 10; // centered in lane
+      const types = ["boost", "multiplier"];
+      const selectedType = types[Math.floor(Math.random() * types.length)];
+      
+      powerUps.push({
+        x: randomLane,
+        y: -30,
+        radius: 12,
+        type: selectedType,
+        speed: 3
+      });
+    }
+
+    setInterval(() => { if (!gameOver) spawnObstacle(); }, 1200);
+    setInterval(() => { if (!gameOver) spawnPowerUp(); }, 4000);
 
     function update() {
       if (gameOver) return;
+
+      // Handle Timers for active power-ups
+      if (speedBoostTimer > 0) {
+        speedBoostTimer--;
+        car.speed = baseSpeed * 1.8; // Faster player movement
+      } else {
+        car.speed = baseSpeed;
+      }
+
+      if (multiplierTimer > 0) {
+        multiplierTimer--;
+        scoreMultiplier = 2; // Double points
+      } else {
+        scoreMultiplier = 1;
+      }
 
       // Move player car
       if (keys["ArrowLeft"] && car.x > 10) car.x -= car.speed;
       if (keys["ArrowRight"] && car.x < canvas.width - car.width - 10) car.x += car.speed;
 
-      // Move obstacles
+      // Move & check obstacles
       for (let i = 0; i < obstacles.length; i++) {
         let obs = obstacles[i];
         obs.y += obs.speed;
 
-        // Collision detection
+        // Collision detection with obstacle
         if (
           car.x < obs.x + obs.width &&
           car.x + car.width > obs.x &&
@@ -86,15 +125,42 @@
           car.y + car.height > obs.y
         ) {
           gameOver = true;
-          alert("Game Over! Score: " + score);
+          alert("Game Over! Final Score: " + score);
           document.location.reload();
         }
       }
 
-      // Remove off-screen obstacles and increase score
+      // Move & collect power-ups
+      for (let i = powerUps.length - 1; i >= 0; i--) {
+        let p = powerUps[i];
+        p.y += p.speed;
+
+        // Simple bounding box collision check with power-up circle
+        if (
+          car.x < p.x + p.radius &&
+          car.x + car.width > p.x - p.radius &&
+          car.y < p.y + p.radius &&
+          car.y + car.height > p.y - p.radius
+        ) {
+          if (p.type === "boost") {
+            speedBoostTimer = 300; // ~5 seconds at 60fps
+          } else if (p.type === "multiplier") {
+            multiplierTimer = 300;
+          }
+          powerUps.splice(i, 1);
+          continue;
+        }
+
+        // Remove off-screen power-ups
+        if (p.y > canvas.height + p.radius) {
+          powerUps.splice(i, 1);
+        }
+      }
+
+      // Remove off-screen obstacles and reward score
       if (obstacles.length > 0 && obstacles[0].y > canvas.height) {
         obstacles.shift();
-        score += 10;
+        score += 10 * scoreMultiplier;
       }
     }
 
@@ -109,18 +175,44 @@
       ctx.moveTo(200, 0); ctx.lineTo(200, canvas.height);
       ctx.stroke();
 
-      // Draw Player Car (Blue)
-      ctx.fillStyle = "#007bff";
+      // Draw Player Car (Glows when boosted)
+      ctx.fillStyle = speedBoostTimer > 0 ? "#ffeb3b" : "#007bff";
       ctx.fillRect(car.x, car.y, car.width, car.height);
 
       // Draw Obstacles (Red)
       ctx.fillStyle = "#dc3545";
       obstacles.forEach(obs => ctx.fillRect(obs.x, obs.y, obs.width, obs.height));
 
-      // Draw Score
+      // Draw Power-Ups
+      powerUps.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = p.type === "boost" ? "#00e676" : "#ff9100";
+        ctx.fill();
+        ctx.closePath();
+
+        // Label icon on power-up
+        ctx.fillStyle = "#000";
+        ctx.font = "12px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(p.type === "boost" ? "⚡" : "2X", p.x, p.y + 4);
+      });
+
+      // UI HUD Overlay
+      ctx.textAlign = "left";
       ctx.fillStyle = "#fff";
       ctx.font = "16px sans-serif";
       ctx.fillText("Score: " + score, 10, 25);
+
+      // Display Active Effects
+      if (speedBoostTimer > 0) {
+        ctx.fillStyle = "#00e676";
+        ctx.fillText("SPEED BOOST!", 10, 50);
+      }
+      if (multiplierTimer > 0) {
+        ctx.fillStyle = "#ff9100";
+        ctx.fillText("2X MULTIPLIER!", 10, 70);
+      }
     }
 
     function gameLoop() {
