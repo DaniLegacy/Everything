@@ -167,3 +167,48 @@ nav a.active {
     font-weight: 700;
     border-bottom: 2px solid #ffffff;
 }
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.services-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.service-card {
+    flex: 1 1 250px;
+    background: var(--bg-card);
+    padding: 1.25rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 0.75rem;
+    }
+
+    nav ul {
+        flex-direction: column; /* Stack navigation vertically on mobile */
+        gap: 0.5rem;
+    }
+
+    nav a {
+        display: block;
+        text-align: center;
+    }
+
+    .card-section, section {
+        padding: 1.25rem;
+    }
+
+    th, td {
+        padding: 0.5rem;
+        font-size: 0.875rem;
+    }
+}
