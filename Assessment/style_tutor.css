@@ -1,20 +1,14 @@
-/* ==========================================================================
-   Week 4: Colour, Typography & Spacing Polish
-   ========================================================================== */
-
-/* 1. Task 1: CSS Variables & Colour Palette */
 :root {
-    --primary-color: #1e3a8a;      /* Deep Navy Blue (High Contrast Text/Headers) */
-    --accent-color: #0d9488;       /* Teal (Buttons/Borders) */
-    --accent-hover: #0f766e;       /* Darker Teal for Hover States */
-    --bg-main: #f8fafc;            /* Light Slate Gray Background */
-    --bg-card: #ffffff;            /* Pure White Card Background */
-    --text-main: #1e293b;          /* Dark Slate Text (WCAG > 4.5:1 ratio) */
-    --text-muted: #475569;         /* Subdued Slate Text */
-    --border-color: #e2e8f0;       /* Subtle Border Gray */
+    --primary-color: #1e3a8a;
+    --accent-color: #0d9488;
+    --accent-hover: #0f766e;
+    --bg-main: #f8fafc;
+    --bg-card: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #475569;
+    --border-color: #e2e8f0;
 }
 
-/* 2. Task 2 & 3: Reset, Typography & Base Spacing */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -23,24 +17,23 @@
 
 body {
     font-family: 'Inter', system-ui, sans-serif;
-    font-size: 1rem;               /* 16px base font size */
-    line-height: 1.6;              /* Readable paragraph line-height */
+    font-size: 1rem;
+    line-height: 1.6;
     color: var(--text-main);
     background-color: var(--bg-main);
-    padding: 1.5rem;               /* Consistent spacing using rem */
+    padding: 1.5rem;
 }
 
-/* Font Hierarchy using rem units */
 h1 {
     font-family: 'Poppins', sans-serif;
-    font-size: 2.25rem;            /* 36px */
+    font-size: 2.25rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
 }
 
 h2 {
     font-family: 'Poppins', sans-serif;
-    font-size: 1.5rem;             /* 24px */
+    font-size: 1.5rem;
     font-weight: 600;
     color: var(--primary-color);
     margin-bottom: 1rem;
@@ -53,7 +46,6 @@ p {
     color: var(--text-main);
 }
 
-/* 3. Layout Structure */
 main {
     max-width: 850px;
     margin: 0 auto;
@@ -96,16 +88,14 @@ nav a:hover {
     background-color: var(--accent-color);
 }
 
-/* 4. Card Component Spacing */
 .card-section, section {
     background: var(--bg-card);
-    padding: 2rem;                 /* Consistent 2rem padding */
-    margin-bottom: 2rem;           /* Consistent 2rem spacing between sections */
+    padding: 2rem;
+    margin-bottom: 2rem;
     border-radius: 8px;
     border: 1px solid var(--border-color);
 }
 
-/* 5. Form Element Polish */
 form div {
     margin-bottom: 1.25rem;
 }
@@ -148,7 +138,6 @@ button[type="submit"]:hover {
     background-color: var(--accent-hover);
 }
 
-/* 6. Table Polish */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -170,4 +159,11 @@ th {
 
 tr:nth-child(even) {
     background-color: #f1f5f9;
+}
+
+nav a.active {
+    background-color: var(--accent-color);
+    color: #ffffff;
+    font-weight: 700;
+    border-bottom: 2px solid #ffffff;
 }
