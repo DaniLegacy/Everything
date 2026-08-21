@@ -16,9 +16,7 @@
       min-height: 100vh;
       user-select: none;
     }
-    #game-container {
-      position: relative;
-    }
+    #game-container { position: relative; }
     canvas {
       border: 4px solid #fff;
       background: #222;
@@ -47,7 +45,6 @@
     #p1-health { background: #e74c3c; }
     #p2-health { background: #3498db; }
 
-    /* Victory Banner Overlay */
     #victory-overlay {
       display: none;
       position: absolute;
@@ -75,9 +72,7 @@
       align-items: center;
       gap: 15px;
     }
-    .active {
-      display: flex;
-    }
+    .active { display: flex; }
     
     .btn {
       background: #333;
@@ -95,10 +90,7 @@
     .btn-p1 { border-color: #e74c3c; }
     .btn-p2 { border-color: #3498db; }
 
-    .map-buttons {
-      display: flex;
-      gap: 15px;
-    }
+    .map-buttons { display: flex; gap: 15px; }
     
     .controls-panel {
       display: flex;
@@ -108,10 +100,58 @@
     }
     .player-controls { display: flex; gap: 8px; }
 
-    /* Customization Screen Grid */
-    .editor-container {
+    /* Customization Panel */
+    .preset-container {
       display: flex;
       gap: 30px;
+      margin: 10px 0;
+    }
+    .player-preset-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      background: #222;
+      padding: 15px;
+      border: 2px solid #555;
+      border-radius: 6px;
+      width: 340px;
+    }
+    .accessory-section {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      width: 100%;
+      align-items: center;
+    }
+    .section-title {
+      font-size: 12px;
+      color: #aaa;
+      margin-top: 4px;
+    }
+    .option-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+    }
+    .opt-btn {
+      background: #111;
+      border: 1px solid #777;
+      color: #fff;
+      padding: 4px 8px;
+      font-size: 11px;
+      cursor: pointer;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    .opt-btn:hover { background: #444; }
+    .opt-btn.active-opt { border-color: #2ecc71; color: #2ecc71; font-weight: bold; }
+
+    /* Custom Pixel Canvas Grid */
+    .editor-container {
+      display: flex;
+      gap: 40px;
       margin-top: 10px;
     }
     .editor-box {
@@ -120,27 +160,35 @@
       align-items: center;
       gap: 10px;
     }
+    .grid-label {
+      font-size: 12px;
+      color: #aaa;
+      margin-top: 4px;
+    }
     .grid {
       display: grid;
-      grid-template-columns: repeat(8, 20px);
-      grid-template-rows: repeat(16, 20px);
       gap: 1px;
       background: #444;
       border: 2px solid #fff;
     }
+    .grid-body {
+      grid-template-columns: repeat(8, 18px);
+      grid-template-rows: repeat(16, 18px);
+    }
+    .grid-accessory {
+      grid-template-columns: repeat(8, 18px);
+      grid-template-rows: repeat(8, 18px);
+    }
     .pixel {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       background: #000000;
       cursor: pointer;
     }
-    .palette {
-      display: flex;
-      gap: 5px;
-    }
+    .palette { display: flex; gap: 5px; }
     .color-swatch {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       border: 1px solid #fff;
       cursor: pointer;
     }
@@ -148,27 +196,136 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-top: 5px;
+      margin-top: 2px;
       font-size: 12px;
     }
     .color-input {
       border: 1px solid #fff;
       background: none;
       width: 32px;
-      height: 28px;
+      height: 24px;
       cursor: pointer;
     }
   </style>
 </head>
 <body>
 
+  <!-- Home Screen -->
   <div id="home-screen" class="screen active">
     <h1 style="font-size: 40px; margin-bottom: 20px;">PIXEL SHOOTER</h1>
     <button class="btn" id="start-btn">Gun Fight Mode</button>
     <button class="btn" id="slash-btn" style="border-color: #f1c40f; color: #f1c40f;">⚔️ Slash Mode (Swords Only)</button>
-    <button class="btn" id="customize-btn">Customize Sprite</button>
+    <button class="btn" id="customize-btn">Customize Sprites</button>
   </div>
 
+  <!-- Sprite Preset Selection Page -->
+  <div id="sprite-select-screen" class="screen">
+    <h2 style="margin-bottom: 5px;">Character Wardrobe</h2>
+    <div style="font-size: 12px; color: #aaa;">Customize your Gun Mayhem bean fighter!</div>
+    <div class="preset-container">
+      
+      <!-- Player 1 Wardrobe -->
+      <div class="player-preset-box">
+        <h3 style="color: #e74c3c; margin: 0;">Player 1</h3>
+        
+        <div class="accessory-section">
+          <div class="section-title">Base Character Color</div>
+          <div class="option-grid">
+            <button class="opt-btn active-opt" onclick="setBodyColor(1, '#e74c3c', this)">Red</button>
+            <button class="opt-btn" onclick="setBodyColor(1, '#3498db', this)">Blue</button>
+            <button class="opt-btn" onclick="setBodyColor(1, '#2ecc71', this)">Green</button>
+            <button class="opt-btn" onclick="setBodyColor(1, '#f1c40f', this)">Yellow</button>
+            <button class="opt-btn" onclick="setBodyColor(1, '#9b59b6', this)">Purple</button>
+          </div>
+        </div>
+
+        <div class="accessory-section">
+          <div class="section-title">Hats & Headgear</div>
+          <div class="option-grid">
+            <button class="opt-btn active-opt" onclick="setHat(1, 'none', this)">None</button>
+            <button class="opt-btn" onclick="setHat(1, 'cap', this)">Cap</button>
+            <button class="opt-btn" onclick="setHat(1, 'crown', this)">Crown</button>
+            <button class="opt-btn" onclick="setHat(1, 'beanie', this)">Beanie</button>
+            <button class="opt-btn" onclick="setHat(1, 'viking', this)">Viking</button>
+          </div>
+        </div>
+
+        <div class="accessory-section">
+          <div class="section-title">Shirts & Tops</div>
+          <div class="option-grid">
+            <button class="opt-btn active-opt" onclick="setShirt(1, 'none', this)">Bare</button>
+            <button class="opt-btn" onclick="setShirt(1, 'stripes', this)">Stripes</button>
+            <button class="opt-btn" onclick="setShirt(1, 'vest', this)">Armor Vest</button>
+            <button class="opt-btn" onclick="setShirt(1, 'tie', this)">Suit & Tie</button>
+          </div>
+        </div>
+
+        <div class="accessory-section">
+          <div class="section-title">Shoes & Kicks</div>
+          <div class="option-grid">
+            <button class="opt-btn active-opt" onclick="setShoes(1, 'matching', this)">Matching</button>
+            <button class="opt-btn" onclick="setShoes(1, 'sneakers', this)">White Kicks</button>
+            <button class="opt-btn" onclick="setShoes(1, 'boots', this)">Dark Boots</button>
+            <button class="opt-btn" onclick="setShoes(1, 'gold', this)">Gold Shoes</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Player 2 Wardrobe -->
+      <div class="player-preset-box">
+        <h3 style="color: #3498db; margin: 0;">Player 2</h3>
+        
+        <div class="accessory-section">
+          <div class="section-title">Base Character Color</div>
+          <div class="option-grid">
+            <button class="opt-btn" onclick="setBodyColor(2, '#e74c3c', this)">Red</button>
+            <button class="opt-btn active-opt" onclick="setBodyColor(2, '#3498db', this)">Blue</button>
+            <button class="opt-btn" onclick="setBodyColor(2, '#2ecc71', this)">Green</button>
+            <button class="opt-btn" onclick="setBodyColor(2, '#f1c40f', this)">Yellow</button>
+            <button class="opt-btn" onclick="setBodyColor(2, '#9b59b6', this)">Purple</button>
+          </div>
+        </div>
+
+        <div class="accessory-section">
+          <div class="section-title">Hats & Headgear</div>
+          <div class="option-grid">
+            <button class="opt-btn active-opt" onclick="setHat(2, 'none', this)">None</button>
+            <button class="opt-btn" onclick="setHat(2, 'cap', this)">Cap</button>
+            <button class="opt-btn" onclick="setHat(2, 'crown', this)">Crown</button>
+            <button class="opt-btn" onclick="setHat(2, 'beanie', this)">Beanie</button>
+            <button class="opt-btn" onclick="setHat(2, 'viking', this)">Viking</button>
+          </div>
+        </div>
+
+        <div class="accessory-section">
+          <div class="section-title">Shirts & Tops</div>
+          <div class="option-grid">
+            <button class="opt-btn active-opt" onclick="setShirt(2, 'none', this)">Bare</button>
+            <button class="opt-btn" onclick="setShirt(2, 'stripes', this)">Stripes</button>
+            <button class="opt-btn" onclick="setShirt(2, 'vest', this)">Armor Vest</button>
+            <button class="opt-btn" onclick="setShirt(2, 'tie', this)">Suit & Tie</button>
+          </div>
+        </div>
+
+        <div class="accessory-section">
+          <div class="section-title">Shoes & Kicks</div>
+          <div class="option-grid">
+            <button class="opt-btn active-opt" onclick="setShoes(2, 'matching', this)">Matching</button>
+            <button class="opt-btn" onclick="setShoes(2, 'sneakers', this)">White Kicks</button>
+            <button class="opt-btn" onclick="setShoes(2, 'boots', this)">Dark Boots</button>
+            <button class="opt-btn" onclick="setShoes(2, 'gold', this)">Gold Shoes</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div style="display: flex; gap: 15px;">
+      <button class="btn" id="make-your-own-btn" style="border-color: #2ecc71; color: #2ecc71;">Make your own!</button>
+      <button class="btn" id="preset-back-btn">Done & Back</button>
+    </div>
+  </div>
+
+  <!-- Map Selection Screen -->
   <div id="map-screen" class="screen">
     <h2 style="font-size: 28px; margin-bottom: 15px;">SELECT MAP</h2>
     <div class="map-buttons">
@@ -179,6 +336,7 @@
     <button class="btn" id="map-back-btn" style="margin-top: 15px;">Back</button>
   </div>
 
+  <!-- Game Screen -->
   <div id="game-screen" class="screen">
     <div id="game-container">
       <div class="hud">
@@ -216,22 +374,31 @@
     <button class="btn" id="menu-btn" style="margin-top: 10px;">Main Menu</button>
   </div>
 
+  <!-- Custom Pixel Editor Screen -->
   <div id="custom-screen" class="screen">
-    <h2>Sprite Editor (8x16)</h2>
-    <div style="font-size: 12px; color: #ccc; margin-bottom: 5px;">Tip: Click and drag to color pixels faster!</div>
+    <h2>Custom Pixel Canvas Editor</h2>
+    <div style="font-size: 12px; color: #ccc; margin-bottom: 5px;">Paint pixel-by-pixel for ultimate custom design!</div>
+    
     <div class="editor-container">
       <div class="editor-box">
         <h3 style="color: #e74c3c;">Player 1</h3>
-        <div id="p1-grid" class="grid"></div>
+        <div class="grid-label">Body Sprite (8x16)</div>
+        <div id="p1-grid" class="grid grid-body"></div>
+        <div class="grid-label">Head Accessory (8x8)</div>
+        <div id="p1-acc-grid" class="grid grid-accessory"></div>
         <div class="palette" id="p1-palette"></div>
         <div class="rgb-picker-container">
           <label for="p1-rgb">Custom RGB:</label>
           <input type="color" id="p1-rgb" class="color-input" value="#ffffff">
         </div>
       </div>
+
       <div class="editor-box">
         <h3 style="color: #3498db;">Player 2</h3>
-        <div id="p2-grid" class="grid"></div>
+        <div class="grid-label">Body Sprite (8x16)</div>
+        <div id="p2-grid" class="grid grid-body"></div>
+        <div class="grid-label">Head Accessory (8x8)</div>
+        <div id="p2-acc-grid" class="grid grid-accessory"></div>
         <div class="palette" id="p2-palette"></div>
         <div class="rgb-picker-container">
           <label for="p2-rgb">Custom RGB:</label>
@@ -243,7 +410,7 @@
   </div>
 
   <script>
-    // Audio Synthesizer
+    // Sound Effects Synthesizer
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     
     function playSound(type) {
@@ -305,7 +472,6 @@
       }
     }
 
-    // Canvas Setup
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
     const gravity = 0.5;
@@ -313,7 +479,7 @@
     let gameMode = 'guns'; 
     let isGameOver = false;
 
-    // Maps Setup
+    // Maps Config
     const maps = {
       Egypt: {
         bg: '#d4a359',
@@ -347,7 +513,7 @@
     };
     let currentMap = maps.Egypt;
 
-    // Powerup Spawn System
+    // Powerups Configuration
     const POWERUP_TYPES = {
       SHIELD: { name: 'shield', color: '#00d2ff', glow: '#00ffff', label: '🛡️' },
       STRENGTH: { name: 'strength', color: '#ff2a2a', glow: '#ff5555', label: '🔥' },
@@ -389,18 +555,6 @@
         ctx.fillText(this.type.label, 0, 1);
 
         ctx.restore();
-
-        if (Math.random() < 0.3) {
-          particles.push(new Particle({
-            x: this.x + Math.random() * this.width,
-            y: currentY + Math.random() * this.height,
-            vx: (Math.random() - 0.5) * 0.5,
-            vy: -Math.random() * 0.8,
-            size: Math.random() * 2 + 1,
-            color: this.type.color,
-            life: 18
-          }));
-        }
       }
 
       update() {
@@ -423,68 +577,98 @@
       powerups.push(new PowerUp(px, py, selectedType));
     }
 
-    // Sprite Grids setup
-    const defaultPalette = ['#000000', '#ffffff', '#e74c3c', '#3498db', '#f1c40f', '#2ecc71', '#9b59b6'];
-    let p1Sprite = Array(16).fill(null).map(() => Array(8).fill('#e74c3c'));
-    let p2Sprite = Array(16).fill(null).map(() => Array(8).fill('#3498db'));
+    // Wardrobe Accessory States
+    const p1Config = { bodyColor: '#e74c3c', hat: 'none', shirt: 'none', shoes: 'matching' };
+    const p2Config = { bodyColor: '#3498db', hat: 'none', shirt: 'none', shoes: 'matching' };
+
+    function setBodyColor(pNum, color, btnElem) {
+      const cfg = pNum === 1 ? p1Config : p2Config;
+      cfg.bodyColor = color;
+      updateActiveButton(btnElem);
+    }
+
+    function setHat(pNum, hatType, btnElem) {
+      const cfg = pNum === 1 ? p1Config : p2Config;
+      cfg.hat = hatType;
+      updateActiveButton(btnElem);
+    }
+
+    function setShirt(pNum, shirtType, btnElem) {
+      const cfg = pNum === 1 ? p1Config : p2Config;
+      cfg.shirt = shirtType;
+      updateActiveButton(btnElem);
+    }
+
+    function setShoes(pNum, shoesType, btnElem) {
+      const cfg = pNum === 1 ? p1Config : p2Config;
+      cfg.shoes = shoesType;
+      updateActiveButton(btnElem);
+    }
+
+    function updateActiveButton(btnElem) {
+      const siblings = btnElem.parentElement.querySelectorAll('.opt-btn');
+      siblings.forEach(b => b.classList.remove('active-opt'));
+      btnElem.classList.add('active-opt');
+      playSound('block');
+    }
+
+    // Custom Canvas Editors Data
+    const defaultPalette = ['#000000', '#ffffff', '#e74c3c', '#3498db', '#f1c40f', '#2ecc71', '#9b59b6', '#333333'];
+    let p1CustomBody = Array(16).fill(null).map(() => Array(8).fill('#000000'));
+    let p2CustomBody = Array(16).fill(null).map(() => Array(8).fill('#000000'));
+    let p1CustomAcc = Array(8).fill(null).map(() => Array(8).fill('#000000'));
+    let p2CustomAcc = Array(8).fill(null).map(() => Array(8).fill('#000000'));
     let p1SelectedColor = '#ffffff';
     let p2SelectedColor = '#ffffff';
+    let isUsingCustomP1 = false;
+    let isUsingCustomP2 = false;
 
-    // Global Mouse State for Drag-Coloring
     let isMouseDown = false;
     window.addEventListener('mousedown', () => isMouseDown = true);
     window.addEventListener('mouseup', () => isMouseDown = false);
 
-    function createEditor(gridId, paletteId, pickerId, spriteData, getColor, setColor) {
-      const grid = document.getElementById(gridId);
-      const palette = document.getElementById(paletteId);
-      const picker = document.getElementById(pickerId);
-      grid.innerHTML = '';
-      palette.innerHTML = '';
-
+    function createGridEditor(gridElem, rows, cols, spriteData, getColor, onEdit) {
+      gridElem.innerHTML = '';
       const colorPixel = (r, c, pixelElem) => {
         spriteData[r][c] = getColor();
         pixelElem.style.background = getColor();
+        if (onEdit) onEdit();
       };
 
-      for (let r = 0; r < 16; r++) {
-        for (let c = 0; c < 8; c++) {
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
           const pixel = document.createElement('div');
           pixel.className = 'pixel';
           pixel.style.background = spriteData[r][c];
 
-          // Mouse Event Listeners for Instant Drag-to-Coloring
           pixel.addEventListener('mousedown', () => colorPixel(r, c, pixel));
-          pixel.addEventListener('mouseenter', () => {
-            if (isMouseDown) colorPixel(r, c, pixel);
-          });
+          pixel.addEventListener('mouseenter', () => { if (isMouseDown) colorPixel(r, c, pixel); });
 
-          // Touch Screen Support
           pixel.addEventListener('touchstart', (e) => {
             e.preventDefault();
             colorPixel(r, c, pixel);
           });
 
-          grid.appendChild(pixel);
+          gridElem.appendChild(pixel);
         }
       }
+    }
 
-      // Touch drag handler across pixels grid
-      grid.addEventListener('touchmove', (e) => {
-        e.preventDefault();
-        const touch = e.touches[0];
-        const target = document.elementFromPoint(touch.clientX, touch.clientY);
-        if (target && target.classList.contains('pixel')) {
-          const pixels = Array.from(grid.children);
-          const index = pixels.indexOf(target);
-          if (index !== -1) {
-            const r = Math.floor(index / 8);
-            const c = index % 8;
-            colorPixel(r, c, target);
-          }
-        }
-      });
+    function createFullEditor(pNum, bodyData, accData, getColor, setColor) {
+      const bodyGrid = document.getElementById(`p${pNum}-grid`);
+      const accGrid = document.getElementById(`p${pNum}-acc-grid`);
+      const palette = document.getElementById(`p${pNum}-palette`);
+      const picker = document.getElementById(`p${pNum}-rgb`);
 
+      const setCustomActive = () => {
+        if (pNum === 1) isUsingCustomP1 = true;
+        if (pNum === 2) isUsingCustomP2 = true;
+      };
+
+      createGridEditor(bodyGrid, 16, 8, bodyData, getColor, setCustomActive);
+      createGridEditor(accGrid, 8, 8, accData, getColor, setCustomActive);
+
+      palette.innerHTML = '';
       defaultPalette.forEach(color => {
         const swatch = document.createElement('div');
         swatch.className = 'color-swatch';
@@ -496,12 +680,9 @@
         palette.appendChild(swatch);
       });
 
-      picker.addEventListener('input', (e) => {
-        setColor(e.target.value);
-      });
+      picker.addEventListener('input', (e) => setColor(e.target.value));
     }
 
-    // Particle class for disintegrating death & effects
     class Particle {
       constructor({ x, y, vx, vy, size, color, life, useGravity = false }) {
         this.x = x;
@@ -555,51 +736,39 @@
       update() {
         this.draw();
         this.position.x += this.velocity.x;
-
-        particles.push(new Particle({
-          x: this.position.x + (this.velocity.x > 0 ? 0 : this.width),
-          y: this.position.y + 2,
-          vx: (Math.random() - 0.5) * 0.5,
-          vy: (Math.random() - 0.5) * 0.5,
-          size: Math.random() * 2 + 1,
-          color: '#f39c12',
-          life: 8
-        }));
       }
     }
 
-    // Fighter Class
+    // Fighter Class (Gun Mayhem Bean Character Engine)
     class Fighter {
-      constructor({ position, color, facingRight, spriteData, name }) {
+      constructor({ position, config, facingRight, customBody, customAcc, isCustom, name }) {
         this.name = name;
         this.position = position;
         this.velocity = { x: 0, y: 0 };
-        this.width = 24;
-        this.height = 48;
-        this.color = color;
+        this.width = 28;
+        this.height = 42;
+        this.config = config;
         this.health = 100;
         this.isGrounded = false;
         this.facingRight = facingRight;
-        this.spriteData = spriteData;
+        this.customBody = customBody;
+        this.customAcc = customAcc;
+        this.isCustom = isCustom;
+        
         this.isBlocking = false;
         this.canBlock = true;
         this.isDead = false;
 
         this.moveSpeed = 4;
-
-        this.powerups = {
-          shieldTimer: 0,
-          strengthTimer: 0,
-          speedTimer: 0
-        };
+        this.powerups = { shieldTimer: 0, strengthTimer: 0, speedTimer: 0 };
 
         this.isJumping = false;
         this.jumpTimer = 0;
         this.maxJumpHoldFrames = 15;
 
-        this.isSlashing = false;
-        this.slashFrame = 0;
-        this.totalSlashFrames = 20;
+        // Animated Gun Recoil & Sword Slash Timers
+        this.recoilAnim = 0;
+        this.slashAnim = 0;
         this.canSlash = true;
       }
 
@@ -608,178 +777,205 @@
         if (type.name === 'shield') this.powerups.shieldTimer = 360; 
         if (type.name === 'strength') this.powerups.strengthTimer = 360;
         if (type.name === 'speed') this.powerups.speedTimer = 360;
-
-        for (let i = 0; i < 15; i++) {
-          particles.push(new Particle({
-            x: this.position.x + this.width / 2,
-            y: this.position.y + this.height / 2,
-            vx: (Math.random() - 0.5) * 6,
-            vy: (Math.random() - 0.5) * 6,
-            size: Math.random() * 4 + 2,
-            color: type.color,
-            life: 25
-          }));
-        }
-      }
-
-      drawPowerupAuras() {
-        const cx = this.position.x + this.width / 2;
-        const cy = this.position.y + this.height / 2;
-
-        if (this.powerups.shieldTimer > 0) {
-          ctx.save();
-          ctx.strokeStyle = '#00d2ff';
-          ctx.fillStyle = 'rgba(0, 210, 255, 0.15)';
-          ctx.shadowColor = '#00ffff';
-          ctx.shadowBlur = 15;
-          ctx.lineWidth = 3;
-          ctx.beginPath();
-          ctx.arc(cx, cy, 32, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.stroke();
-
-          const angle = Date.now() * 0.003;
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
-          ctx.lineWidth = 1.5;
-          ctx.beginPath();
-          ctx.arc(cx, cy, 30, angle, angle + Math.PI * 0.8);
-          ctx.stroke();
-          ctx.restore();
-        }
-
-        if (this.powerups.strengthTimer > 0) {
-          ctx.save();
-          const flameTime = Date.now() * 0.01;
-          for (let i = 0; i < 5; i++) {
-            const offsetX = Math.sin(flameTime + i) * 12;
-            const offsetY = (i * 8 + (Date.now() * 0.05) % 40);
-            ctx.fillStyle = i % 2 === 0 ? '#ff2a2a' : '#ff9900';
-            ctx.globalAlpha = 0.4;
-            ctx.beginPath();
-            ctx.arc(cx + offsetX, this.position.y + this.height - (offsetY % 50), 6 + (i % 3), 0, Math.PI * 2);
-            ctx.fill();
-          }
-          ctx.restore();
-        }
-
-        if (this.powerups.speedTimer > 0 && (this.velocity.x !== 0 || this.velocity.y !== 0)) {
-          if (Math.random() < 0.6) {
-            particles.push(new Particle({
-              x: this.position.x + (Math.random() * this.width),
-              y: this.position.y + (Math.random() * this.height),
-              vx: -this.velocity.x * 0.3,
-              vy: -this.velocity.y * 0.3,
-              size: 4,
-              color: '#00ff88',
-              life: 12
-            }));
-          }
-        }
       }
 
       draw() {
         if (this.isDead) return;
 
-        this.drawPowerupAuras();
+        ctx.save();
 
-        const pixelSize = 3;
-        let offsetX = 0;
-        let offsetY = 0;
-        let swordAngle = 0;
-        let renderSlashWave = false;
-
-        if (this.isSlashing) {
-          const progress = this.slashFrame / this.totalSlashFrames;
-          const dir = this.facingRight ? 1 : -1;
-
-          if (progress < 0.15) { 
-            offsetX = -3 * dir;
-            offsetY = -2;
-            swordAngle = -Math.PI * 0.45 * dir;
-          } else if (progress < 0.35) { 
-            offsetX = 8 * dir;
-            offsetY = 3;
-            swordAngle = Math.PI * 0.4 * dir;
-            renderSlashWave = true;
-          } else if (progress < 0.65) { 
-            offsetX = 10 * dir;
-            offsetY = 5;
-            swordAngle = Math.PI * 0.6 * dir;
-          } else if (progress < 0.85) { 
-            offsetX = 2 * dir;
-            offsetY = -1;
-            swordAngle = Math.PI * 0.1 * dir;
-          } else { 
-            offsetX = 0;
-            offsetY = 0;
-            swordAngle = 0;
-          }
-        }
-
-        for (let r = 0; r < 16; r++) {
-          for (let c = 0; c < 8; c++) {
-            const pixelColor = this.spriteData[r][c];
-            if (pixelColor !== '#000000') {
-              ctx.fillStyle = pixelColor;
-              ctx.fillRect(
-                this.position.x + offsetX + c * pixelSize,
-                this.position.y + offsetY + r * pixelSize,
-                pixelSize,
-                pixelSize
-              );
+        if (this.isCustom) {
+          // Render Pixel Grid Fighter
+          const pixelSize = 3;
+          for (let r = 0; r < 16; r++) {
+            for (let c = 0; c < 8; c++) {
+              const pixelColor = this.customBody[r][c];
+              if (pixelColor !== '#000000') {
+                ctx.fillStyle = pixelColor;
+                ctx.fillRect(this.position.x + c * pixelSize, this.position.y + r * pixelSize, pixelSize, pixelSize);
+              }
             }
           }
+          for (let r = 0; r < 8; r++) {
+            for (let c = 0; c < 8; c++) {
+              const accColor = this.customAcc[r][c];
+              if (accColor !== '#000000') {
+                ctx.fillStyle = accColor;
+                ctx.fillRect(this.position.x + c * pixelSize, this.position.y - 12 + r * pixelSize, pixelSize, pixelSize);
+              }
+            }
+          }
+        } else {
+          // Render Gun Mayhem Bean Fighter with Customizable Clothes & Hats
+          const bx = this.position.x;
+          const by = this.position.y;
+          const bw = this.width;
+          const bh = this.height;
+
+          // 1. Shoes
+          let shoeColor = this.config.bodyColor;
+          if (this.config.shoes === 'sneakers') shoeColor = '#ffffff';
+          if (this.config.shoes === 'boots') shoeColor = '#111111';
+          if (this.config.shoes === 'gold') shoeColor = '#f1c40f';
+
+          ctx.fillStyle = shoeColor;
+          ctx.strokeStyle = '#000000';
+          ctx.lineWidth = 2;
+
+          // Left & Right Foot Oval
+          ctx.beginPath();
+          ctx.ellipse(bx + 6, by + bh - 2, 8, 5, 0, 0, Math.PI * 2);
+          ctx.fill(); ctx.stroke();
+
+          ctx.beginPath();
+          ctx.ellipse(bx + bw - 6, by + bh - 2, 8, 5, 0, 0, Math.PI * 2);
+          ctx.fill(); ctx.stroke();
+
+          // 2. Main Bean Body
+          ctx.fillStyle = this.config.bodyColor;
+          ctx.beginPath();
+          ctx.roundRect(bx, by, bw, bh - 6, 14);
+          ctx.fill(); ctx.stroke();
+
+          // 3. Shirts / Tops
+          if (this.config.shirt === 'stripes') {
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(bx + 3, by + 18, bw - 6, 4);
+            ctx.fillRect(bx + 3, by + 26, bw - 6, 4);
+          } else if (this.config.shirt === 'vest') {
+            ctx.fillStyle = '#333333';
+            ctx.fillRect(bx + 2, by + 16, bw - 4, 16);
+            ctx.fillStyle = '#e74c3c';
+            ctx.fillRect(bx + 10, by + 22, 8, 4);
+          } else if (this.config.shirt === 'tie') {
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(bx + 4, by + 15, bw - 8, 18);
+            ctx.fillStyle = '#111111';
+            ctx.fillRect(bx + bw / 2 - 2, by + 15, 4, 12);
+          }
+
+          // 4. Eyes (Facing direction)
+          ctx.fillStyle = '#ffffff';
+          const eyeX = this.facingRight ? bx + 14 : bx + 2;
+          ctx.beginPath();
+          ctx.ellipse(eyeX + 4, by + 10, 4, 5, 0, 0, Math.PI * 2);
+          ctx.ellipse(eyeX + 10, by + 10, 4, 5, 0, 0, Math.PI * 2);
+          ctx.fill(); ctx.stroke();
+
+          // Pupils
+          ctx.fillStyle = '#000000';
+          const pupilOffset = this.facingRight ? 2 : -2;
+          ctx.beginPath();
+          ctx.arc(eyeX + 4 + pupilOffset, by + 10, 2, 0, Math.PI * 2);
+          ctx.arc(eyeX + 10 + pupilOffset, by + 10, 2, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Mouth
+          ctx.beginPath();
+          ctx.moveTo(eyeX + 2, by + 18);
+          ctx.lineTo(eyeX + 10, by + 18);
+          ctx.stroke();
+
+          // 5. Hats & Headgear
+          if (this.config.hat === 'cap') {
+            ctx.fillStyle = '#e74c3c';
+            ctx.beginPath();
+            ctx.arc(bx + bw / 2, by + 5, 12, Math.PI, 0);
+            ctx.fill(); ctx.stroke();
+            ctx.fillRect(this.facingRight ? bx + 10 : bx - 6, by + 3, 20, 4);
+          } else if (this.config.hat === 'crown') {
+            ctx.fillStyle = '#f1c40f';
+            ctx.beginPath();
+            ctx.moveTo(bx + 2, by);
+            ctx.lineTo(bx + 2, by - 10);
+            ctx.lineTo(bx + 8, by - 4);
+            ctx.lineTo(bx + bw / 2, by - 12);
+            ctx.lineTo(bx + bw - 8, by - 4);
+            ctx.lineTo(bx + bw - 2, by - 10);
+            ctx.lineTo(bx + bw - 2, by);
+            ctx.closePath();
+            ctx.fill(); ctx.stroke();
+          } else if (this.config.hat === 'beanie') {
+            ctx.fillStyle = '#2ecc71';
+            ctx.beginPath();
+            ctx.arc(bx + bw / 2, by + 6, 13, Math.PI, 0);
+            ctx.fill(); ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(bx + bw / 2, by - 8, 4, 0, Math.PI * 2);
+            ctx.fill(); ctx.stroke();
+          } else if (this.config.hat === 'viking') {
+            ctx.fillStyle = '#7f8c8d';
+            ctx.fillRect(bx, by - 4, bw, 8);
+            ctx.strokeRect(bx, by - 4, bw, 8);
+            ctx.fillStyle = '#ffffff';
+            // Left Horn
+            ctx.beginPath(); ctx.moveTo(bx, by - 2); ctx.lineTo(bx - 8, by - 12); ctx.lineTo(bx + 2, by - 4); ctx.fill(); ctx.stroke();
+            // Right Horn
+            ctx.beginPath(); ctx.moveTo(bx + bw, by - 2); ctx.lineTo(bx + bw + 8, by - 12); ctx.lineTo(bx + bw - 2, by - 4); ctx.fill(); ctx.stroke();
+          }
         }
 
-        if (gameMode === 'slash') {
-          const originX = (this.facingRight ? this.position.x + this.width : this.position.x) + offsetX;
-          const originY = this.position.y + 24 + offsetY;
+        // Gun Mayhem Floating Hands & Weapon Rendering with Animation!
+        let handX = this.facingRight ? this.position.x + this.width + 4 : this.position.x - 8;
+        let handY = this.position.y + 22;
 
+        // Animate Gun Recoil
+        if (this.recoilAnim > 0) {
+          handX += (this.facingRight ? -4 : 4);
+          this.recoilAnim--;
+        }
+
+        // Draw Floating Hand
+        ctx.fillStyle = '#f1c40f';
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(handX, handY, 5, 0, Math.PI * 2);
+        ctx.fill(); ctx.stroke();
+
+        // Draw Animated Weapon
+        if (gameMode === 'guns') {
+          // Pistol Sprite
+          ctx.fillStyle = '#333333';
+          const pDir = this.facingRight ? 1 : -1;
+          ctx.fillRect(handX, handY - 3, 14 * pDir, 5);
+          ctx.fillRect(handX + (2 * pDir), handY + 2, 4 * pDir, 5);
+        } else if (gameMode === 'slash') {
+          // Sword Slash Animation
           ctx.save();
-          ctx.translate(originX, originY);
-          
-          const baseDirection = this.facingRight ? 1 : -1;
-          ctx.rotate(swordAngle);
+          ctx.translate(handX, handY);
 
-          ctx.fillStyle = this.powerups.strengthTimer > 0 ? '#ff2a2a' : '#bdc3c7';
-          ctx.fillRect(0, -3 * baseDirection, 36 * baseDirection, 5);
-          ctx.fillStyle = '#f1c40f';
-          ctx.fillRect(0, -6 * baseDirection, 4 * baseDirection, 11);
-          ctx.restore();
-
-          if (renderSlashWave) {
-            ctx.save();
-            ctx.translate(originX, originY);
-            ctx.strokeStyle = this.powerups.strengthTimer > 0 ? '#ff2a2a' : '#ffffff';
-            ctx.shadowColor = this.powerups.strengthTimer > 0 ? '#ff0000' : '#3498db';
-            ctx.shadowBlur = 15;
-            ctx.lineWidth = this.powerups.strengthTimer > 0 ? 9 : 6;
+          let angle = this.facingRight ? 0.2 : -0.2;
+          if (this.slashAnim > 0) {
+            angle = this.facingRight ? (1.2 - this.slashAnim * 0.1) : (-1.2 + this.slashAnim * 0.1);
+            
+            // Render Arc Slash Effect Trace
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+            ctx.lineWidth = 4;
             ctx.beginPath();
-            const startAngle = this.facingRight ? -Math.PI * 0.4 : Math.PI * 0.6;
-            const endAngle = this.facingRight ? Math.PI * 0.45 : Math.PI * 1.4;
-            ctx.arc(0, 0, 48, startAngle, endAngle, !this.facingRight);
+            ctx.arc(0, 0, 32, -0.8, 0.8);
             ctx.stroke();
 
-            ctx.strokeStyle = '#f1c40f';
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            ctx.arc(0, 0, 42, startAngle, endAngle, !this.facingRight);
-            ctx.stroke();
-            ctx.restore();
+            this.slashAnim--;
           }
+
+          ctx.rotate(angle);
+          ctx.fillStyle = this.powerups.strengthTimer > 0 ? '#ff2a2a' : '#bdc3c7';
+          ctx.fillRect(0, -2, 30 * (this.facingRight ? 1 : -1), 5);
+          ctx.fillStyle = '#f1c40f';
+          ctx.fillRect(0, -4, 4 * (this.facingRight ? 1 : -1), 9);
+          ctx.restore();
         }
 
         if (this.isBlocking) {
           ctx.strokeStyle = '#00ffff';
           ctx.lineWidth = 3;
           ctx.beginPath();
-          ctx.arc(
-            this.position.x + this.width / 2,
-            this.position.y + this.height / 2,
-            28, 0, Math.PI * 2
-          );
+          ctx.arc(this.position.x + this.width / 2, this.position.y + this.height / 2, 28, 0, Math.PI * 2);
           ctx.stroke();
         }
+
+        ctx.restore();
       }
 
       update(platforms, isHoldingJump) {
@@ -790,14 +986,6 @@
         if (this.powerups.speedTimer > 0) this.powerups.speedTimer--;
 
         this.moveSpeed = this.powerups.speedTimer > 0 ? 7 : 4;
-
-        if (this.isSlashing) {
-          this.slashFrame++;
-          if (this.slashFrame >= this.totalSlashFrames) {
-            this.isSlashing = false;
-            this.slashFrame = 0;
-          }
-        }
 
         this.draw();
         
@@ -818,8 +1006,8 @@
         this.velocity.y += gravity;
 
         this.isGrounded = false;
-
         const groundY = canvas.height - 20;
+
         if (this.position.y + this.height >= groundY) {
           this.position.y = groundY - this.height;
           this.velocity.y = 0;
@@ -845,17 +1033,6 @@
       takeDamage(amount) {
         if (this.powerups.shieldTimer > 0) {
           playSound('block');
-          for (let i = 0; i < 8; i++) {
-            particles.push(new Particle({
-              x: this.position.x + this.width / 2,
-              y: this.position.y + this.height / 2,
-              vx: (Math.random() - 0.5) * 5,
-              vy: (Math.random() - 0.5) * 5,
-              size: Math.random() * 3 + 2,
-              color: '#00ffff',
-              life: 12
-            }));
-          }
           return false;
         }
 
@@ -886,14 +1063,8 @@
           this.isBlocking = true;
           this.canBlock = false;
           playSound('block');
-          
-          setTimeout(() => {
-            this.isBlocking = false;
-          }, 500);
-
-          setTimeout(() => {
-            this.canBlock = true;
-          }, 1000);
+          setTimeout(() => this.isBlocking = false, 500);
+          setTimeout(() => this.canBlock = true, 1000);
         }
       }
 
@@ -902,96 +1073,54 @@
         this.isDead = true;
         playSound('death');
 
-        const pixelSize = 3;
-        for (let r = 0; r < 16; r++) {
-          for (let c = 0; c < 8; c++) {
-            const pixelColor = this.spriteData[r][c];
-            if (pixelColor !== '#000000') {
-              particles.push(new Particle({
-                x: this.position.x + c * pixelSize,
-                y: this.position.y + r * pixelSize,
-                vx: (Math.random() - 0.5) * 8,
-                vy: (Math.random() - 1) * 6,
-                size: pixelSize,
-                color: pixelColor,
-                life: 60 + Math.random() * 30,
-                useGravity: true
-              }));
-            }
-          }
+        for (let i = 0; i < 30; i++) {
+          particles.push(new Particle({
+            x: this.position.x + Math.random() * this.width,
+            y: this.position.y + Math.random() * this.height,
+            vx: (Math.random() - 0.5) * 8,
+            vy: (Math.random() - 1) * 6,
+            size: 4 + Math.random() * 4,
+            color: this.config.bodyColor,
+            life: 60 + Math.random() * 30,
+            useGravity: true
+          }));
         }
       }
 
       attack(bullets, opponent) {
         if (this.isDead || isGameOver) return;
-
         const baseDamage = this.powerups.strengthTimer > 0 ? 25 : 10;
 
         if (gameMode === 'guns') {
           playSound('shoot');
+          this.recoilAnim = 5; // Trigger recoil animation
           const direction = this.facingRight ? 12 : -12;
-          const bulletPosX = this.facingRight ? this.position.x + this.width : this.position.x - 8;
+          const bulletPosX = this.facingRight ? this.position.x + this.width + 12 : this.position.x - 16;
           bullets.push(new Bullet({
-            position: { x: bulletPosX, y: this.position.y + 18 },
+            position: { x: bulletPosX, y: this.position.y + 20 },
             velocity: { x: direction, y: 0 },
             color: this.powerups.strengthTimer > 0 ? '#ff2a2a' : '#f1c40f',
             damage: baseDamage
           }));
-
-          for (let i = 0; i < 6; i++) {
-            particles.push(new Particle({
-              x: bulletPosX,
-              y: this.position.y + 20,
-              vx: (this.facingRight ? 1 : -1) * (Math.random() * 4 + 1),
-              vy: (Math.random() - 0.5) * 3,
-              size: Math.random() * 3 + 2,
-              color: '#e67e22',
-              life: 10
-            }));
-          }
         } else if (gameMode === 'slash') {
           if (!this.canSlash) return;
-          this.isSlashing = true;
-          this.slashFrame = 0;
           this.canSlash = false;
+          this.slashAnim = 12; // Trigger sword slash arc animation
           playSound('slash');
+          setTimeout(() => this.canSlash = true, 300);
 
-          setTimeout(() => { this.canSlash = true; }, 350);
-
-          setTimeout(() => {
-            if (this.isDead || opponent.isDead) return;
-
-            const slashRange = 60;
-            const slashX = this.facingRight ? this.position.x + this.width : this.position.x - slashRange;
-            
-            if (
-              slashX < opponent.position.x + opponent.width &&
-              slashX + slashRange > opponent.position.x &&
-              this.position.y < opponent.position.y + opponent.height &&
-              this.position.y + this.height > opponent.position.y
-            ) {
-              if (opponent.isBlocking) {
-                playSound('block');
-              } else {
-                const slashDmg = this.powerups.strengthTimer > 0 ? 35 : 20;
-                const fatal = opponent.takeDamage(slashDmg);
-
-                if (!fatal) {
-                  for (let i = 0; i < 12; i++) {
-                    particles.push(new Particle({
-                      x: opponent.position.x + opponent.width / 2,
-                      y: opponent.position.y + opponent.height / 2,
-                      vx: (Math.random() - 0.5) * 8,
-                      vy: (Math.random() - 0.5) * 8,
-                      size: Math.random() * 3 + 2,
-                      color: this.powerups.strengthTimer > 0 ? '#ff2a2a' : '#ffffff',
-                      life: 14
-                    }));
-                  }
-                }
-              }
-            }
-          }, 100);
+          const slashRange = 60;
+          const slashX = this.facingRight ? this.position.x + this.width : this.position.x - slashRange;
+          
+          if (
+            slashX < opponent.position.x + opponent.width &&
+            slashX + slashRange > opponent.position.x &&
+            this.position.y < opponent.position.y + opponent.height &&
+            this.position.y + this.height > opponent.position.y
+          ) {
+            if (opponent.isBlocking) playSound('block');
+            else opponent.takeDamage(this.powerups.strengthTimer > 0 ? 35 : 20);
+          }
         }
       }
     }
@@ -1009,16 +1138,20 @@
       player1 = new Fighter({
         name: 'PLAYER 1',
         position: { x: 100, y: 100 },
-        color: '#e74c3c',
+        config: p1Config,
         facingRight: true,
-        spriteData: p1Sprite
+        customBody: p1CustomBody,
+        customAcc: p1CustomAcc,
+        isCustom: isUsingCustomP1
       });
       player2 = new Fighter({
         name: 'PLAYER 2',
         position: { x: 660, y: 100 },
-        color: '#3498db',
+        config: p2Config,
         facingRight: false,
-        spriteData: p2Sprite
+        customBody: p2CustomBody,
+        customAcc: p2CustomAcc,
+        isCustom: isUsingCustomP2
       });
       player1.health = 100;
       player2.health = 100;
@@ -1069,34 +1202,20 @@
         if (keys.p2Right) { player2.velocity.x = player2.moveSpeed; player2.facingRight = true; }
 
         powerupSpawnTimer++;
-        if (powerupSpawnTimer % 350 === 0) {
-          spawnPowerUp();
-        }
+        if (powerupSpawnTimer % 350 === 0) spawnPowerUp();
       }
 
       for (let i = powerups.length - 1; i >= 0; i--) {
         const p = powerups[i];
         p.update();
 
-        if (
-          !player1.isDead &&
-          player1.position.x < p.x + p.width &&
-          player1.position.x + player1.width > p.x &&
-          player1.position.y < p.y + p.height &&
-          player1.position.y + player1.height > p.y
-        ) {
+        if (!player1.isDead && player1.position.x < p.x + p.width && player1.position.x + player1.width > p.x && player1.position.y < p.y + p.height && player1.position.y + player1.height > p.y) {
           player1.applyPowerUp(p.type);
           powerups.splice(i, 1);
           continue;
         }
 
-        if (
-          !player2.isDead &&
-          player2.position.x < p.x + p.width &&
-          player2.position.x + player2.width > p.x &&
-          player2.position.y < p.y + p.height &&
-          player2.position.y + player2.height > p.y
-        ) {
+        if (!player2.isDead && player2.position.x < p.x + p.width && player2.position.x + player2.width > p.x && player2.position.y < p.y + p.height && player2.position.y + player2.height > p.y) {
           player2.applyPowerUp(p.type);
           powerups.splice(i, 1);
           continue;
@@ -1121,34 +1240,16 @@
             continue;
           }
 
-          if (
-            !player2.isDead &&
-            b.position.x < player2.position.x + player2.width &&
-            b.position.x + b.width > player2.position.x &&
-            b.position.y < player2.position.y + player2.height &&
-            b.position.y + b.height > player2.position.y
-          ) {
-            if (player2.isBlocking) {
-              playSound('block');
-            } else {
-              player2.takeDamage(b.damage);
-            }
+          if (!player2.isDead && b.position.x < player2.position.x + player2.width && b.position.x + b.width > player2.position.x && b.position.y < player2.position.y + player2.height && b.position.y + b.height > player2.position.y) {
+            if (player2.isBlocking) playSound('block');
+            else player2.takeDamage(b.damage);
             bullets.splice(i, 1);
             continue;
           }
 
-          if (
-            !player1.isDead &&
-            b.position.x < player1.position.x + player1.width &&
-            b.position.x + b.width > player1.position.x &&
-            b.position.y < player1.position.y + player1.height &&
-            b.position.y + b.height > player1.position.y
-          ) {
-            if (player1.isBlocking) {
-              playSound('block');
-            } else {
-              player1.takeDamage(b.damage);
-            }
+          if (!player1.isDead && b.position.x < player1.position.x + player1.width && b.position.x + b.width > player1.position.x && b.position.y < player1.position.y + player1.height && b.position.y + b.height > player1.position.y) {
+            if (player1.isBlocking) playSound('block');
+            else player1.takeDamage(b.damage);
             bullets.splice(i, 1);
             continue;
           }
@@ -1156,7 +1257,6 @@
       }
     }
 
-    // Controls Setup
     function setupButton(buttonId, onPress, onRelease) {
       const btn = document.getElementById(buttonId);
       btn.addEventListener('mousedown', onPress);
@@ -1201,7 +1301,6 @@
       if (e.code === 'ArrowUp') keys.p2Jump = false;
     });
 
-    // Navigation Screens
     function showScreen(screenId) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       document.getElementById(screenId).classList.add('active');
@@ -1230,13 +1329,20 @@
     document.getElementById('map-africa').addEventListener('click', () => startMap('Africa'));
     document.getElementById('map-back-btn').addEventListener('click', () => showScreen('home-screen'));
 
+    // Open Sprite Selection Panel from Main Menu
     document.getElementById('customize-btn').addEventListener('click', () => {
-      showScreen('custom-screen');
-      createEditor('p1-grid', 'p1-palette', 'p1-rgb', p1Sprite, () => p1SelectedColor, (c) => p1SelectedColor = c);
-      createEditor('p2-grid', 'p2-palette', 'p2-rgb', p2Sprite, () => p2SelectedColor, (c) => p2SelectedColor = c);
+      showScreen('sprite-select-screen');
     });
 
-    document.getElementById('back-btn').addEventListener('click', () => showScreen('home-screen'));
+    // Open Custom Pixel Editor from inside the Sprite Selection Panel
+    document.getElementById('make-your-own-btn').addEventListener('click', () => {
+      showScreen('custom-screen');
+      createFullEditor(1, p1CustomBody, p1CustomAcc, () => p1SelectedColor, (c) => p1SelectedColor = c);
+      createFullEditor(2, p2CustomBody, p2CustomAcc, () => p2SelectedColor, (c) => p2SelectedColor = c);
+    });
+
+    document.getElementById('preset-back-btn').addEventListener('click', () => showScreen('home-screen'));
+    document.getElementById('back-btn').addEventListener('click', () => showScreen('sprite-select-screen'));
     document.getElementById('rematch-btn').addEventListener('click', () => initGame());
     document.getElementById('menu-btn').addEventListener('click', () => {
       if (animationId) cancelAnimationFrame(animationId);
