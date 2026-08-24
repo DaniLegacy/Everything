@@ -1,0 +1,220 @@
+/* ==========================================================================
+   Dream Destination Project - Style Sheet (United Kingdom)
+   ========================================================================== */
+
+/* CSS Variables */
+:root {
+    --primary-color: #00247d;      /* UK Union Jack Navy Blue */
+    --accent-color: #cf142b;       /* UK Red */
+    --accent-hover: #9e0e20;
+    --bg-main: #f8fafc;
+    --bg-card: #ffffff;
+    --text-main: #1e293b;
+    --border-color: #cbd5e1;
+}
+
+/* Reset & Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-main);
+    background-color: var(--bg-main);
+    padding: 1rem;
+}
+
+/* Typography Hierarchy */
+h1, h2, h3 {
+    font-family: 'Poppins', sans-serif;
+}
+
+h1 {
+    font-size: 2.25rem;
+    margin-bottom: 0.25rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    border-bottom: 3px solid var(--accent-color);
+    padding-bottom: 0.25rem;
+}
+
+h3 {
+    font-size: 1.25rem;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+p {
+    margin-bottom: 1rem;
+}
+
+/* Page Layout */
+main {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+header {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    text-align: center;
+    padding: 2.5rem 1rem;
+    border-radius: 8px 8px 0 0;
+}
+
+/* Navigation & Hover Effects */
+nav {
+    background-color: #0f172a;
+    padding: 0.75rem;
+    margin-bottom: 2rem;
+    border-radius: 0 0 8px 8px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+nav a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.5rem 1.25rem;
+    border-radius: 4px;
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Hover Effect requirement */
+nav a:hover {
+    background-color: var(--accent-color);
+    color: #ffffff;
+}
+
+nav a.active {
+    background-color: var(--accent-color);
+    font-weight: 700;
+}
+
+/* Hero Section & Image Styling */
+.hero-section {
+    margin-bottom: 2rem;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.hero-image {
+    width: 100%;
+    max-height: 350px;
+    object-fit: cover;
+    display: block;
+    border-radius: 8px;
+}
+
+/* Card Containers */
+.card-section {
+    background: var(--bg-card);
+    padding: 1.75rem;
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+/* Flexbox Layout for Attractions Grid */
+.attractions-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.attraction-card {
+    flex: 1 1 260px;
+    background: var(--bg-card);
+    padding: 1.25rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.attraction-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.attraction-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+th, td {
+    padding: 0.85rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+th {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+}
+
+tr:nth-child(even) {
+    background-color: #f1f5f9;
+}
+
+/* Lists */
+ul {
+    margin-left: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+li {
+    margin-bottom: 0.5rem;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 1.5rem;
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 600px) {
+    nav ul {
+        flex-direction: column;
+    }
+
+    nav a {
+        display: block;
+        text-align: center;
+    }
+
+    .attractions-grid {
+        flex-direction: column;
+    }
+}
