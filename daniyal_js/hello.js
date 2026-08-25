@@ -1,3 +1,1 @@
-<script>
-    console.log("Hello, World!");
-</script>
+document.write("<h1>Hello, World!</h1>");
