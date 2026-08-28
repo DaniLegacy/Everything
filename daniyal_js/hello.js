@@ -7,4 +7,4 @@ let isGameOver = false;
 
 score = score + 10;
 
-console.log(playerName, score, isGameOver);
+console.log("Player Name: " + playerName + ", Score: " + score + ", Game Over: " + isGameOver);
