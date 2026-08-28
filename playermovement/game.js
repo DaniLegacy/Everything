@@ -1,8 +1,6 @@
-export const Game = [
-    player_speed = 2,
-    deceleration = 0.9,
-    camera_position = [
-        0, 
-        0,
-    ],
-];
+// game.js
+export const Game = {
+  player_speed: 1.5,       // Adjust movement speed acceleration force
+  deceleration: 0.85,      // Adjust slide/friction depth (0 to 1)
+  camera_position: [0, 0]  // Initialize the camera array so index [0] and [1] exist
+};

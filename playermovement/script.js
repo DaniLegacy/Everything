@@ -2,7 +2,7 @@ import { Game } from "./game.js";
 
 const player = document.getElementById("player");
 
-// Define game constants from your CSS bounds
+// Explicit game layout fallback variables
 const ARENA_WIDTH = 500;
 const ARENA_HEIGHT = 400;
 const PLAYER_WIDTH = 30;
@@ -16,14 +16,15 @@ const playerObject = {
   vy: 0,
 };
 
-const speed = Game.player_speed;
-const deceleration = Game.deceleration;
+// CRITICAL FIX: Safe values fallback if game.js variables are undefined/0
+const speed = Game && Game.player_speed ? Game.player_speed : 2; 
+const deceleration = Game && Game.deceleration ? Game.deceleration : 0.9; 
 
-// 1. FIXED: Center the player within the 500x400 #gameArea container
+// Initialise and center player inside the game box container
 function centerPlayerOnStartup() {
   playerObject.x = (ARENA_WIDTH / 2) - (PLAYER_WIDTH / 2);
   playerObject.y = (ARENA_HEIGHT / 2) - (PLAYER_HEIGHT / 2);
-
+  
   player.style.left = playerObject.x + "px";
   player.style.top = playerObject.y + "px";
 }
@@ -34,7 +35,7 @@ if (document.readyState === "complete") {
   window.addEventListener("load", centerPlayerOnStartup);
 }
 
-// Keyboard input management
+// Keyboard key state listeners
 const keysPressed = {};
 
 document.addEventListener("keydown", function (event) {
@@ -45,9 +46,9 @@ document.addEventListener("keyup", function (event) {
   keysPressed[event.key] = false;
 });
 
-// Game Frame Loop (Runs at roughly 50 FPS)
+// Game Frame Loop execution
 setInterval(function () {
-  // Input velocity additions
+  // Add input velocity components
   if (keysPressed["ArrowRight"] || keysPressed["d"]) {
     playerObject.vx += speed;
   }
@@ -61,23 +62,35 @@ setInterval(function () {
     playerObject.vy += speed;
   }
 
-  // Update physical coordinates via current velocity
+  // Factor linear movement coordinates
   playerObject.x += playerObject.vx;
   playerObject.y += playerObject.vy;
 
-  // 2. FIXED: Keep camera center calculation aligned with your arena box dimensions
-  Game.camera_position[0] = playerObject.x - (ARENA_WIDTH / 2) + (PLAYER_WIDTH / 2);
-  Game.camera_position[1] = playerObject.y - (ARENA_HEIGHT / 2) + (PLAYER_HEIGHT / 2);
-
-  // 3. FIXED: Clamp the player precisely inside the 500x400 game boundaries
+  // 1. Constraint enforcement clamping
   playerObject.x = Math.max(0, Math.min(playerObject.x, ARENA_WIDTH - PLAYER_WIDTH));
   playerObject.y = Math.max(0, Math.min(playerObject.y, ARENA_HEIGHT - PLAYER_HEIGHT));
-  
-  // Apply velocity dampening / friction simulation
+
+  // 2. Camera array variable definitions check
+  if (Game && Array.isArray(Game.camera_position)) {
+    Game.camera_position[0] = playerObject.x - (ARENA_WIDTH / 2) + (PLAYER_WIDTH / 2);
+    Game.camera_position[1] = playerObject.y - (ARENA_HEIGHT / 2) + (PLAYER_HEIGHT / 2);
+  }
+ 
+  // Simulate frictional slide deceleration physics
   playerObject.vx *= deceleration;
   playerObject.vy *= deceleration;
 
-  // Apply positions directly to the live CSS element tags
+  // 3. Render position via explicit absolute properties
   player.style.left = playerObject.x + "px";
   player.style.top = playerObject.y + "px";
+
+    // Apply positions directly to the live CSS element tags
+  player.style.left = playerObject.x + "px";
+  player.style.top = playerObject.y + "px";
+
+  // ADD THIS: Shift the parent game area container in reverse to create a camera tracking illusion
+  const gameArea = document.getElementById("gameArea");
+  if (gameArea) {
+    gameArea.style.transform = `translate(${-Game.camera_position[0]}px, ${-Game.camera_position[1]}px)`;
+  }
 }, 20);
