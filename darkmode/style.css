@@ -16,3 +16,11 @@ button {
   font-size: 16px;
   cursor: pointer;
 }
+
+#toggleBtn {
+  color: white;
+  border: none;
+  border-radius: 5px;
+  background-color: #020000;
+  font-family: 'Poppins', sans-serif;
+}
