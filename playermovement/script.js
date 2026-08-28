@@ -2,6 +2,10 @@ import { Game } from "./game.js";
 
 const player = document.getElementById("player");
 
+// Define hardcoded dimensions matching your CSS file exactly
+const PLAYER_WIDTH = 30;
+const PLAYER_HEIGHT = 30;
+
 // Track player variables
 const playerObject = {
   x: 0,  
@@ -13,12 +17,11 @@ const playerObject = {
 const speed = Game.player_speed;
 const deceleration = Game.deceleration;
 
-// 1. Calculate the initial screen center safely once the DOM loads
+// 1. Fixed: Uses explicit fallback constants to avoid the 0px offset loading bug
 function centerPlayerOnStartup() {
-  playerObject.x = (window.innerWidth / 2) - (player.offsetWidth / 2);
-  playerObject.y = (window.innerHeight / 2) - (player.offsetHeight / 2);
+  playerObject.x = (window.innerWidth / 2) - (PLAYER_WIDTH / 2);
+  playerObject.y = (window.innerHeight / 2) - (PLAYER_HEIGHT / 2);
 
-  // Instantly apply coordinates to prevent a visual jumping bug
   player.style.left = playerObject.x + "px";
   player.style.top = playerObject.y + "px";
 }
@@ -60,14 +63,13 @@ setInterval(function () {
   playerObject.x += playerObject.vx;
   playerObject.y += playerObject.vy;
 
-  // 2. FIXED: Keeps the array intact using indexes [0] and [1]
-  // Calculates the camera target by factoring in the screen dimensions and player sizes
-  Game.camera_position[0] = playerObject.x - (window.innerWidth / 2) + (player.offsetWidth / 2);
-  Game.camera_position[1] = playerObject.y - (window.innerHeight / 2) + (player.offsetHeight / 2);
+  // 2. Camera tracking update using fixed dimensions
+  Game.camera_position[0] = playerObject.x - (window.innerWidth / 2) + (PLAYER_WIDTH / 2);
+  Game.camera_position[1] = playerObject.y - (window.innerHeight / 2) + (PLAYER_HEIGHT / 2);
 
-  // 3. FIXED: Bound constraints lock the player within the window frame accurately 
-  playerObject.x = Math.max(0, Math.min(playerObject.x, window.innerWidth - player.offsetWidth));
-  playerObject.y = Math.max(0, Math.min(playerObject.y, window.innerHeight - player.offsetHeight));
+  // 3. Fixed: Clamping works correctly now because constants are never 0
+  playerObject.x = Math.max(0, Math.min(playerObject.x, window.innerWidth - PLAYER_WIDTH));
+  playerObject.y = Math.max(0, Math.min(playerObject.y, window.innerHeight - PLAYER_HEIGHT));
   
   // Apply velocity dampening / friction simulation
   playerObject.vx *= deceleration;
