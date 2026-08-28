@@ -1,8 +1,15 @@
 const player = document.getElementById("player");
 
+const playerObject = {
+  x: 50,  
+  y: 50,
+  vx: 0,
+  vy: 0,
+};
+
 let playerX = 50;
 let playerY = 50;
-const speed = 5;
+const speed = 2;
 
 const keysPressed = {};
 
@@ -16,18 +23,24 @@ document.addEventListener("keyup", function (event) {
 
 setInterval(function () {
   if (keysPressed["ArrowRight"] || keysPressed["d"]) {
-    playerX += speed;
+    playerObject.vx += speed;
   }
   if (keysPressed["ArrowLeft"] || keysPressed["a"]) {
-    playerX -= speed;
+    playerObject.vx -= speed;
   }
   if (keysPressed["ArrowUp"] || keysPressed["w"]) {
-    playerY -= speed;
+    playerObject.vy -= speed;
   }
   if (keysPressed["ArrowDown"] || keysPressed["s"]) {
-    playerY += speed;
+    playerObject.vy += speed;
   }
 
-  player.style.left = playerX + "px";
-  player.style.top = playerY + "px";
+  playerObject.x += playerObject.vx;
+  playerObject.y += playerObject.vy;
+
+  playerObject.vx *= 0.9;
+  playerObject.vy *= 0.9;
+
+  player.style.left = playerObject.x + "px";
+  player.style.top = playerObject.y + "px";
 }, 20);
