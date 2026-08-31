@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Click Counter</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding-top: 50px;
+    }
+
+    #count {
+      font-size: 2rem;
+      color: #333;
+    }
+
+    .highlight {
+      color: firebrick;
+      font-weight: bold;
+      font-size: 2.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <button id="clickBtn">Click me</button>
+  <p id="count">Clicks: 0</p>
+
+  <script>
+    let clicks = 0;
+
+    const button = document.getElementById("clickBtn");
+    const display = document.getElementById("count");
+
+    button.addEventListener("click", function () {
+      clicks = clicks + 1;
+      
+      display.textContent = "Clicks: " + clicks;
+
+      if (clicks >= 10) {
+        display.classList.add("highlight");
+      }
+    });
+  </script>
+</body>
+</html>
