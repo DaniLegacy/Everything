@@ -8,6 +8,7 @@ const ARENA_WIDTH = 500;
 const ARENA_HEIGHT = 400;
 const PLAYER_WIDTH = 30;
 const PLAYER_HEIGHT = 30;
+const MAX_SPEED = 10;
 
 // Track player properties
 const playerObject = {
@@ -18,8 +19,8 @@ const playerObject = {
 };
 
 // Safe values fallback if game.js variables are undefined/0
-const speed = Game && Game.player_speed ? Game.player_speed : 2; 
-const deceleration = Game && Game.deceleration ? Game.deceleration : 0.9; 
+const speed = Game && Game.player_speed ? Game.player_speed : 3; 
+const deceleration = Game && Game.deceleration ? Game.deceleration : 0.8; 
 
 // Initialise and center player inside the game box container
 function centerPlayerOnStartup() {
@@ -64,6 +65,11 @@ setInterval(function () {
   }
 
   // Factor linear movement coordinates
+  let movementMagnitude = Math.sqrt(playerObject.vx * playerObject.vx + playerObject.vy * playerObject.vy);
+  if (movementMagnitude > MAX_SPEED) {
+    playerObject.vx = (playerObject.vx / movementMagnitude) * MAX_SPEED;
+    playerObject.vy = (playerObject.vy / movementMagnitude) * MAX_SPEED;
+  };
   playerObject.x += playerObject.vx;
   playerObject.y += playerObject.vy;
 
