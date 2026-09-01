@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600;700&display=swap"
         rel="stylesheet">
-    
+
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -47,7 +47,7 @@
             font-size: 1.5rem;
             margin-top: 15px;
         }
-        
+
         button {
             font-family: 'Inter', sans-serif;
             padding: 8px 16px;
@@ -84,57 +84,57 @@
         let keysPressed = {};
 
         document.addEventListener("keydown", function (event) {
-          keysPressed[event.key] = true;
+            keysPressed[event.key] = true;
         });
 
         document.addEventListener("keyup", function (event) {
-          keysPressed[event.key] = false;
+            keysPressed[event.key] = false;
         });
 
         function randomBetween(min, max) {
-          return Math.floor(Math.random() * (max - min + 1)) + min;
+            return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
         function isColliding(a, b) {
-          return (
-            a.x < b.x + b.width &&
-            a.x + a.width > b.x &&
-            a.y < b.y + b.height &&
-            a.y + a.height > b.y
-          );
+            return (
+                a.x < b.x + b.width &&
+                a.x + a.width > b.x &&
+                a.y < b.y + b.height &&
+                a.y + a.height > b.y
+            );
         }
 
         function resetEnemy() {
-          enemy.y = -30;
-          enemy.x = randomBetween(0, 370);
-          enemyElem.style.left = enemy.x + "px";
+            enemy.y = -30;
+            enemy.x = randomBetween(0, 370);
+            enemyElem.style.left = enemy.x + "px";
         }
 
         function updateGame() {
-          if (keysPressed["ArrowLeft"] && player.x > 0) player.x -= 6;
-          if (keysPressed["ArrowRight"] && player.x < 360) player.x += 6;
+            if (keysPressed["ArrowLeft"] && player.x > 0) player.x -= 6;
+            if (keysPressed["ArrowRight"] && player.x < 360) player.x += 6;
 
-          enemy.y += enemySpeed;
+            enemy.y += enemySpeed;
 
-          if (enemy.y > 500) {
-            score += 1;
-            scoreDisplay.textContent = "Score: " + score;
-            resetEnemy();
-            
-            if (score % 5 === 0) {
-              enemySpeed += 1;
+            if (enemy.y > 500) {
+                score += 1;
+                scoreDisplay.textContent = "Score: " + score;
+                resetEnemy();
+
+                if (score % 5 === 0) {
+                    enemySpeed += 1;
+                }
             }
-          }
 
-          playerElem.style.left = player.x + "px";
-          playerElem.style.top = player.y + "px";
-          enemyElem.style.top = enemy.y + "px";
+            playerElem.style.left = player.x + "px";
+            playerElem.style.top = player.y + "px";
+            enemyElem.style.top = enemy.y + "px";
 
-          if (isColliding(player, enemy)) {
-            clearInterval(gameLoopId);
-            scoreDisplay.textContent = "GAME OVER! Final Score: " + score;
-            playerElem.style.backgroundColor = "gray";
-          }
+            if (isColliding(player, enemy)) {
+                clearInterval(gameLoopId);
+                scoreDisplay.textContent = "GAME OVER! Final Score: " + score;
+                playerElem.style.backgroundColor = "gray";
+            }
         }
 
         function startGameLoop() {
@@ -161,4 +161,5 @@
         resetGame();
     </script>
 </body>
+
 </html>
