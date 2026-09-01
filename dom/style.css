@@ -1,0 +1,24 @@
+#clickBtn {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    padding-top: 50px;
+}
+
+#count {
+    font-size: 2rem;
+    color: #333;
+}
+
+/* Style change target class */
+.highlight {
+    color: firebrick;
+    font-weight: bold;
+    font-size: 2.5rem;
+}
