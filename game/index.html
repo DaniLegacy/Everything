@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dodge the Blocks</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background-color: #1a1a1a;
+      color: #fff;
+    }
+
+    #gameCanvas {
+      position: relative;
+      width: 400px;
+      height: 500px;
+      background-color: #111;
+      margin: 0 auto;
+      overflow: hidden;
+      border: 2px solid #555;
+    }
+
+    #player {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background-color: #2ecc71;
+    }
+
+    #enemy {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background-color: #e74c3c;
+    }
+
+    #scoreBoard {
+      font-size: 1.5rem;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Dodge the Blocks!</h1>
+  <div id="gameCanvas">
+    <div id="player"></div>
+    <div id="enemy"></div>
+  </div>
+  <p id="scoreBoard">Score: 0</p>
+
+  <script>
+    // 1. Setup DOM elements and variables[cite: 1, 2]
+    const playerElem = document.getElementById("player");[cite: 1]
+    const enemyElem = document.getElementById("enemy");[cite: 1]
+    const scoreDisplay = document.getElementById("scoreBoard");[cite: 1, 2]
+
+    let score = 0;[cite: 2]
+    let enemySpeed = 4;
+    
+    // Bounding Box objects
+    const player = { x: 180, y: 440, width: 40, height: 40 };[cite: 2]
+    const enemy = { x: 180, y: 0, width: 30, height: 30 };[cite: 2]
+
+    // 2. Track arrow keys
+    let keysPressed = {};[cite: 2]
+
+    document.addEventListener("keydown", function (event) {[cite: 2]
+      keysPressed[event.key] = true;[cite: 2]
+    });
+
+    document.addEventListener("keyup", function (event) {[cite: 2]
+      keysPressed[event.key] = false;[cite: 2]
+    });
+
+    // 3. Helper Functions
+    function randomBetween(min, max) {[cite: 2]
+      return Math.floor(Math.random() * (max - min + 1)) + min;[cite: 2]
+    }
+
+    function isColliding(a, b) {[cite: 2]
+      return (
+        a.x < b.x + b.width &&
+        a.x + a.width > b.x &&
+        a.y < b.y + b.height &&
+        a.y + a.height > b.y
+      );[cite: 2]
+    }
+
+    function resetEnemy() {
+      enemy.y = -30;
+      enemy.x = randomBetween(0, 370);[cite: 2]
+      enemyElem.style.left = enemy.x + "px";[cite: 1]
+    }
+
+    // Set initial enemy position
+    resetEnemy();
+
+    // 4. Game Loop[cite: 2]
+    const gameLoop = setInterval(function () {[cite: 2]
+      // Move player left/right[cite: 2]
+      if (keysPressed["ArrowLeft"] && player.x > 0) player.x -= 6;[cite: 2]
+      if (keysPressed["ArrowRight"] && player.x < 360) player.x += 6;[cite: 2]
+
+      // Move falling enemy down
+      enemy.y += enemySpeed;
+
+      // Check if enemy passed the bottom (player successfully dodged)
+      if (enemy.y > 500) {
+        score += 1;[cite: 2]
+        scoreDisplay.textContent = "Score: " + score;[cite: 1, 2]
+        resetEnemy();
+        
+        // Slightly increase falling speed over time
+        if (score % 5 === 0) {
+          enemySpeed += 1;
+        }
+      }
+
+      // Update positions on screen[cite: 1]
+      playerElem.style.left = player.x + "px";[cite: 1]
+      playerElem.style.top = player.y + "px";[cite: 1]
+      enemyElem.style.top = enemy.y + "px";[cite: 1]
+
+      // Check hit collision[cite: 2]
+      if (isColliding(player, enemy)) {[cite: 2]
+        clearInterval(gameLoop);[cite: 2]
+        scoreDisplay.textContent = "GAME OVER! Final Score: " + score;[cite: 1, 2]
+        playerElem.style.backgroundColor = "gray";[cite: 1]
+      }
+    }, 20);
+  </script>
+</body>
+</html>
