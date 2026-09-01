@@ -1,55 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Dodge the Blocks</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      background-color: #1a1a1a;
-      color: #fff;
-    }
-
-    #gameCanvas {
-      position: relative;
-      width: 400px;
-      height: 500px;
-      background-color: #111;
-      margin: 0 auto;
-      overflow: hidden;
-      border: 2px solid #555;
-    }
-
-    #player {
-      position: absolute;
-      width: 40px;
-      height: 40px;
-      background-color: #2ecc71;
-    }
-
-    #enemy {
-      position: absolute;
-      width: 30px;
-      height: 30px;
-      background-color: #e74c3c;
-    }
-
-    #scoreBoard {
-      font-size: 1.5rem;
-      margin-top: 15px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Dodge the Blocks</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
-  <h1>Dodge the Blocks!</h1>
-  <div id="gameCanvas">
-    <div id="player"></div>
-    <div id="enemy"></div>
-  </div>
-  <p id="scoreBoard">Score: 0</p>
+    <h1>Dodge the Blocks</h1>
+    <div id="gameCanvas">
+        <div id="player"></div>
+        <div id="enemy"></div>
+    </div>
+    <p id="scoreBoard">Score: 0</p>
 
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
+
 </html>
