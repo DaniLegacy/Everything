@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dodge the Blocks - Deluxe Edition</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background-color: #1a1a1a;
+      color: #fff;
+    }
+
+    #gameCanvas {
+      position: relative;
+      width: 400px;
+      height: 500px;
+      background-color: #111;
+      margin: 10px auto;
+      overflow: hidden;
+      border: 2px solid #555;
+    }
+
+    #player {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background-color: #2ecc71;
+    }
+
+    #enemy {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background-color: #e74c3c;
+    }
+
+    .ui-board {
+      display: flex;
+      justify-content: space-around;
+      width: 400px;
+      margin: 0 auto;
+      font-size: 1.2rem;
+    }
+
+    /* Mod 2 */
+    #restartBtn {
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #e67e22;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      display: none;
+      margin: 10px auto;
+    }
+
+    #restartBtn:hover {
+      background-color: #d35400;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Dodge the Blocks!</h1>
+
+  <div class="ui-board">
+    <p id="scoreBoard">Score: 0</p>
+    <!-- Mod 1 & Mod 3 -->
+    <p id="livesBoard">Lives: 3</p>
+    <p id="highScoreBoard">High Score: 0</p>
+  </div>
+
+  <div id="gameCanvas">
+    <div id="player"></div>
+    <div id="enemy"></div>
+  </div>
+
+  <!-- Mod 2 -->
+  <button id="restartBtn">Play Again</button>
+
+  <script src="script.js"></script>
+</body>
+</html>
