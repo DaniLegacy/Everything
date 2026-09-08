@@ -1,0 +1,90 @@
+body {
+    font-family:'Poppins', sans-serif;
+    text-align: center;
+    background-color: #000000;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #2b2b2b;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.5);
+}
+
+h1 {
+    color: #ffffff;
+    background-color: #000000;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 0;
+}
+
+.score-board {
+    display: flex;
+    justify-content: space-around;
+    font-size: 1.4rem;
+    margin: 20px 0;
+    color: #fff;
+}
+
+.choices {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 25px 0;
+}
+
+.btn {
+    padding: 12px 24px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    background-color: #000000;
+    color: #fff;
+    border: 2px solid #ffffff;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+}
+
+.btn:hover:not(:disabled) {
+    background-color: #252525;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(255, 255, 255, 0.2);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#result {
+    font-size: 1.2rem;
+    margin: 20px 0;
+    min-height: 50px;
+    color: #fff;
+}
+
+#resetBtn {
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+}
+
+#resetBtn:hover {
+    background-color: #d6d6d6;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(255, 255, 255, 0.2);
+}

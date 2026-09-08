@@ -35,9 +35,9 @@ function playRound(playerSelection) {
 function checkWinner() {
   if (playerScore === 5 || compScore === 5) {
     if (playerScore === 5) {
-      resultDisplay.textContent = "GAME OVER: You won the match!";
+      resultDisplay.textContent = "GAME OVER: You won the match.";
     } else {
-      resultDisplay.textContent = "GAME OVER: Computer won the match!";
+      resultDisplay.textContent = "GAME OVER: Computer won the match.";
     }
 
     // Disable choice buttons
@@ -56,6 +56,6 @@ resetBtn.addEventListener("click", function () {
   compScore = 0;
   playerScoreElem.textContent = "0";
   compScoreElem.textContent = "0";
-  resultDisplay.textContent = "First to 5 points wins! Pick your move.";
+  resultDisplay.textContent = "First to 5 points wins. Please pick your move.";
   choiceButtons.forEach(button => button.disabled = false);
 });

@@ -1,115 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Rock Paper Scissors - Deluxe</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      text-align: center;
-      background-color: #1a1a2e;
-      color: #e94560;
-      margin: 0;
-      padding: 20px;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      background: #16213e;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    }
-
-    h1 {
-      color: #0f3460;
-      background-color: #e94560;
-      padding: 10px;
-      border-radius: 8px;
-      margin-top: 0;
-    }
-
-    .score-board {
-      display: flex;
-      justify-content: space-around;
-      font-size: 1.4rem;
-      margin: 20px 0;
-      color: #fff;
-    }
-
-    .choices {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin: 25px 0;
-    }
-
-    .btn {
-      padding: 12px 24px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      background-color: #0f3460;
-      color: #fff;
-      border: 2px solid #e94560;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .btn:hover:not(:disabled) {
-      background-color: #e94560;
-      transform: translateY(-2px);
-    }
-
-    .btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    #result {
-      font-size: 1.2rem;
-      margin: 20px 0;
-      min-height: 50px;
-      color: #fff;
-    }
-
-    #resetBtn {
-      background-color: #e94560;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      font-size: 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    #resetBtn:hover {
-      background-color: #ff6b81;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Rock Paper Scissors - Deluxe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-  <div class="container">
-    <h1>Rock Paper Scissors</h1>
+    <div class="container">
+        <h1>Rock Paper Scissors</h1>
 
-    <div class="score-board">
-      <p>Player: <span id="playerScore">0</span></p>
-      <p>Computer: <span id="compScore">0</span></p>
+        <div class="score-board">
+            <p>Player: <span id="playerScore">0</span></p>
+            <p>Bot: <span id="compScore">0</span></p>
+        </div>
+
+        <div class="choices">
+            <button class="btn choice-btn" value="Rock">Rock</button>
+            <button class="btn choice-btn" value="Paper">Paper</button>
+            <button class="btn choice-btn" value="Scissors">Scissors</button>
+        </div>
+
+        <div id="result">First to 5 points wins. Please pick your move.</div>
+
+        <button id="resetBtn">Reset Game</button>
     </div>
 
-    <div class="choices">
-      <button class="btn choice-btn" value="Rock">Rock</button>
-      <button class="btn choice-btn" value="Paper">Paper</button>
-      <button class="btn choice-btn" value="Scissors">Scissors</button>
-    </div>
-
-    <div id="result">First to 5 points wins! Pick your move.</div>
-
-    <button id="resetBtn">Reset Game</button>
-  </div>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
+
 </html>
