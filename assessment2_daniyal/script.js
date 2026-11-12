@@ -9,7 +9,6 @@ let compScore = 0;
 const choices = ["Rock", "Paper", "Scissors"];
 
 function playRound(playerSelection) {
-  // Generate random computer choice
   const randomIndex = Math.floor(Math.random() * 3);
   const compSelection = choices[randomIndex];
 

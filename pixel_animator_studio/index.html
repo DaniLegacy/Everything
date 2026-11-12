@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixelCraft Ultra — Pro Pixel Animator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #070a12;
+            --bg-surface: #0f172a;
+            --bg-surface-hover: #1e293b;
+            --border-color: #1e293b;
+            
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
+            --accent-glow: rgba(99, 102, 241, 0.4);
+            
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
+            
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --radius-sm: 6px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #818cf8 0%, #c084fc 50%, #f43f5e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+            max-width: 1750px;
+        }
+
+        .main-workspace {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 16px;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .main-workspace {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+        }
+
+        .panel h3 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 12px;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 6px;
+        }
+
+        .tool-group {
+            margin-bottom: 14px;
+        }
+
+        .tool-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .color-picker-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-base);
+            padding: 6px 10px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+        }
+
+        input[type="color"] {
+            -webkit-appearance: none;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            background: none;
+        }
+
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+
+        input[type="color"]::-webkit-color-swatch {
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-sm);
+        }
+
+        .hex-display {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .btn-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+        }
+
+        button {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        button:hover {
+            background-color: var(--bg-surface-hover);
+            border-color: var(--text-muted);
+        }
+
+        button.primary {
+            background-color: var(--accent);
+            border-color: var(--accent);
+        }
+        button.primary:hover {
+            background-color: var(--accent-hover);
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
+
+        button.danger {
+            background-color: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+        button.danger:hover {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        button.active-tool {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: white;
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .flex-column {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        /* Canvas Arena Container */
+        .canvas-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg-surface);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            position: relative;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+        }
+
+        .canvas-top-bar {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1600px;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 0 4px;
+        }
+
+        .canvas-info-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: var(--bg-base);
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .canvas-viewport {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
+            max-height: 72vh;
+            padding: 16px;
+            background: radial-gradient(circle, #0b1120 0%, #030712 100%);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Maximum performance high-density 1600px x 1600px canvas workspace */
+        #grid {
+            width: 1600px;
+            height: 1600px;
+            min-width: 1600px;
+            min-height: 1600px;
+            max-width: 1600px;
+            max-height: 1600px;
+            display: flex;
+            flex-wrap: wrap;
+            background-color: #000000;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), 0 0 0 4px #334155;
+            user-select: none;
+            position: relative;
+        }
+
+        .pixel {
+            background-color: #000000;
+            border: 0.5px solid rgba(255, 255, 255, 0.015);
+            box-sizing: border-box;
+            transition: background-color 0.02s ease;
+        }
+
+        .pixel.onion {
+            opacity: 0.3 !important;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        .settings-grid input {
+            width: 100%;
+            padding: 6px;
+            background: var(--bg-base);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: var(--radius-md);
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        .settings-grid input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        /* Timeline Panel */
+        .timeline-panel {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+        }
+
+        .timeline-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .playback-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .fps-control {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            background: var(--bg-base);
+            padding: 4px 10px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .fps-control input {
+            width: 40px;
+            padding: 3px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: var(--radius-sm);
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .frames-scroll-container {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 6px 2px 12px 2px;
+            min-height: 100px;
+            align-items: center;
+        }
+
+        .frame-thumb {
+            min-width: 72px;
+            height: 72px;
+            background-color: #000;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .frame-thumb:hover {
+            transform: translateY(-2px);
+            border-color: var(--text-muted);
+        }
+
+        .frame-thumb.active {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .frame-thumb canvas {
+            width: 100%;
+            height: 100%;
+            image-rendering: pixelated;
+        }
+
+        .frame-number {
+            position: absolute;
+            top: 3px;
+            left: 5px;
+            font-size: 0.65rem;
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 1px 4px;
+            border-radius: 3px;
+            pointer-events: none;
+        }
+
+        .delete-frame-btn {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            border: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 0.65rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .frame-thumb:hover .delete-frame-btn {
+            opacity: 1;
+        }
+
+        .delete-frame-btn:hover {
+            background: var(--danger-hover);
+        }
+
+        .add-frame-card {
+            min-width: 72px;
+            height: 72px;
+            background: var(--bg-base);
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-md);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            font-weight: 500;
+            gap: 2px;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .add-frame-card:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: var(--bg-surface-hover);
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            user-select: none;
+        }
+
+        .checkbox-label input {
+            cursor: pointer;
+            accent-color: var(--accent);
+            width: 15px;
+            height: 15px;
+        }
+
+        .frame-counter-display {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>PixelCraft Ultra</h1>
+        <p>Pro Pixel Animator • Massive 1600×1600px High-Density Canvas Workspace (Up to 128×128 Grid)</p>
+    </header>
+
+    <div class="app-container">
+        <div class="main-workspace">
+            <!-- Left Controls Panel -->
+            <div class="panel">
+                <h3>🎨 Palette & Tools</h3>
+                
+                <div class="tool-group">
+                    <label>Primary Color</label>
+                    <div class="color-picker-wrapper">
+                        <input type="color" id="colorPicker" value="#6366f1">
+                        <span id="hexLabel" class="hex-display">#6366F1</span>
+                    </div>
+                </div>
+
+                <div class="tool-group">
+                    <label>Drawing Tools</label>
+                    <div class="btn-grid">
+                        <button id="toolPen" class="active-tool">✏️ Pen</button>
+                        <button id="toolEraser">🧹 Eraser</button>
+                        <button id="toolBucket">🪣 Bucket</button>
+                        <button id="toolPicker">👁️ Picker</button>
+                    </div>
+                </div>
+
+                <div class="tool-group">
+                    <label>Canvas Actions</label>
+                    <div class="flex-column">
+                        <button id="clearBtn" class="danger">🗑️ Clear Frame</button>
+                        <button id="copyBtn">📋 Copy to Next</button>
+                    </div>
+                </div>
+
+                <div class="tool-group" style="margin-bottom: 0;">
+                    <label>Grid Resolution (4 to 128)</label>
+                    <div class="settings-grid">
+                        <input type="number" id="gridSizeInput" value="32" min="4" max="128">
+                        <button id="resizeBtn" class="primary">Apply Grid</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Canvas Area -->
+            <div class="canvas-container">
+                <div class="canvas-top-bar">
+                    <div class="canvas-info-badge" id="canvasInfo">Grid: 32 × 32 (1600px Canvas)</div>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="onionSkinToggle" checked> Onion Skin Preview
+                    </label>
+                </div>
+                <div class="canvas-viewport">
+                    <div id="grid"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Timeline Panel -->
+        <div class="timeline-panel">
+            <div class="timeline-controls">
+                <div class="playback-controls">
+                    <button id="playBtn" class="primary">▶ Play Animation</button>
+                    <div class="fps-control">
+                        <span>FPS</span>
+                        <input type="number" id="fpsInput" value="6" min="1" max="30">
+                    </div>
+                </div>
+                <div class="frame-counter-display" id="frameCounter">
+                    Frame 1 of 1
+                </div>
+            </div>
+
+            <div class="frames-scroll-container" id="framesContainer">
+                <!-- Frame thumbnails injected dynamically -->
+                <div class="add-frame-card" id="addFrameBtn" title="Add New Frame">
+                    <span style="font-size: 1.2rem; font-weight: 300;">+</span>
+                    <span>New Frame</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State Management
+        let gridSize = 32;
+        const physicalCanvasSize = 1600; // Expanded to massive 1600px width & height workspace
+        let currentTool = 'pen'; // pen, eraser, bucket, picker
+        let currentColor = '#6366f1';
+        let isDrawing = false;
+        let isPlaying = false;
+        let playInterval = null;
+        let currentFps = 6;
+        let onionSkinEnabled = true;
+
+        // Frames array stores 2D arrays representing color grids
+        let frames = [];
+        let currentFrameIndex = 0;
+
+        // DOM Elements
+        const gridEl = document.getElementById('grid');
+        const colorPicker = document.getElementById('colorPicker');
+        const hexLabel = document.getElementById('hexLabel');
+        const toolPen = document.getElementById('toolPen');
+        const toolEraser = document.getElementById('toolEraser');
+        const toolBucket = document.getElementById('toolBucket');
+        const toolPicker = document.getElementById('toolPicker');
+        const clearBtn = document.getElementById('clearBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const gridSizeInput = document.getElementById('gridSizeInput');
+        const resizeBtn = document.getElementById('resizeBtn');
+        const canvasInfo = document.getElementById('canvasInfo');
+        const playBtn = document.getElementById('playBtn');
+        const fpsInput = document.getElementById('fpsInput');
+        const framesContainer = document.getElementById('framesContainer');
+        const addFrameBtn = document.getElementById('addFrameBtn');
+        const frameCounter = document.getElementById('frameCounter');
+        const onionSkinToggle = document.getElementById('onionSkinToggle');
+
+        // Initialize empty frame data
+        function createEmptyGrid(size) {
+            let grid = [];
+            for (let y = 0; y < size; y++) {
+                let row = [];
+                for (let x = 0; x < size; x++) {
+                    row.push(''); // Empty string means transparent/blank
+                }
+                grid.push(row);
+            }
+            return grid;
+        }
+
+        // Initialize App
+        function initApp() {
+            frames = [createEmptyGrid(gridSize)];
+            currentFrameIndex = 0;
+            setupGridDOM();
+            renderTimeline();
+            updateCanvasDisplay();
+        }
+
+        // Setup DOM elements for the active grid mapped perfectly onto 1600px
+        function setupGridDOM() {
+            gridEl.innerHTML = '';
+            const pixelSize = physicalCanvasSize / gridSize;
+
+            for (let y = 0; y < gridSize; y++) {
+                for (let x = 0; x < gridSize; x++) {
+                    const pixel = document.createElement('div');
+                    pixel.classList.add('pixel');
+                    pixel.style.width = `${pixelSize}px`;
+                    pixel.style.height = `${pixelSize}px`;
+                    pixel.dataset.x = x;
+                    pixel.dataset.y = y;
+
+                    pixel.addEventListener('mousedown', (e) => {
+                        if (isPlaying) return;
+                        isDrawing = true;
+                        handlePixelInteraction(x, y);
+                    });
+
+                    pixel.addEventListener('mouseenter', (e) => {
+                        if (isPlaying) return;
+                        if (isDrawing) {
+                            handlePixelInteraction(x, y);
+                        }
+                    });
+
+                    gridEl.appendChild(pixel);
+                }
+            }
+
+            window.addEventListener('mouseup', () => {
+                isDrawing = false;
+            });
+
+            canvasInfo.textContent = `Grid: ${gridSize} × ${gridSize} (1600px Canvas)`;
+        }
+
+        // Handle tool action on specific pixel
+        function handlePixelInteraction(x, y) {
+            const currentGrid = frames[currentFrameIndex];
+
+            if (currentTool === 'pen') {
+                currentGrid[y][x] = currentColor;
+            } else if (currentTool === 'eraser') {
+                currentGrid[y][x] = '';
+            } else if (currentTool === 'bucket') {
+                floodFill(x, y, currentGrid[y][x], currentColor);
+            } else if (currentTool === 'picker') {
+                const pickedColor = currentGrid[y][x];
+                if (pickedColor) {
+                    currentColor = pickedColor;
+                    colorPicker.value = pickedColor;
+                    hexLabel.textContent = pickedColor.toUpperCase();
+                }
+                setTool('pen');
+                return;
+            }
+
+            updateCanvasDisplay();
+            updateThumbnail(currentFrameIndex);
+        }
+
+        // Flood Fill Algorithm for Bucket tool
+        function floodFill(startX, startY, targetColor, fillColor) {
+            if (targetColor === fillColor) return;
+            const currentGrid = frames[currentFrameIndex];
+            const queue = [[startX, startY]];
+
+            while (queue.length > 0) {
+                const [x, y] = queue.pop();
+
+                if (x < 0 || x >= gridSize || y < 0 || y >= gridSize) continue;
+                if (currentGrid[y][x] !== targetColor) continue;
+
+                currentGrid[y][x] = fillColor;
+
+                queue.push([x + 1, y]);
+                queue.push([x - 1, y]);
+                queue.push([x, y + 1]);
+                queue.push([x, y - 1]);
+            }
+        }
+
+        // Update visual state of the main drawing canvas
+        function updateCanvasDisplay() {
+            const currentGrid = frames[currentFrameIndex];
+            // Disable onion skin during animation playback to prevent flashing/ghosting
+            const prevGrid = (!isPlaying && onionSkinEnabled && currentFrameIndex > 0) ? frames[currentFrameIndex - 1] : null;
+            const pixels = gridEl.children;
+
+            let index = 0;
+            for (let y = 0; y < gridSize; y++) {
+                for (let x = 0; x < gridSize; x++) {
+                    const pixel = pixels[index++];
+                    const color = currentGrid[y][x];
+
+                    // Reset styling
+                    pixel.classList.remove('onion');
+                    if (color) {
+                        pixel.style.backgroundColor = color;
+                        pixel.style.opacity = '1';
+                    } else if (prevGrid && prevGrid[y][x]) {
+                        pixel.style.backgroundColor = prevGrid[y][x];
+                        pixel.classList.add('onion');
+                    } else {
+                        pixel.style.backgroundColor = '#000000';
+                        pixel.style.opacity = '1';
+                    }
+                }
+            }
+        }
+
+        // Tool Selection Handling
+        function setTool(toolName) {
+            currentTool = toolName;
+            [toolPen, toolEraser, toolBucket, toolPicker].forEach(btn => btn.classList.remove('active-tool'));
+            if (toolName === 'pen') toolPen.classList.add('active-tool');
+            if (toolName === 'eraser') toolEraser.classList.add('active-tool');
+            if (toolName === 'bucket') toolBucket.classList.add('active-tool');
+            if (toolName === 'picker') toolPicker.classList.add('active-tool');
+        }
+
+        toolPen.addEventListener('click', () => setTool('pen'));
+        toolEraser.addEventListener('click', () => setTool('eraser'));
+        toolBucket.addEventListener('click', () => setTool('bucket'));
+        toolPicker.addEventListener('click', () => setTool('picker'));
+
+        colorPicker.addEventListener('input', (e) => {
+            currentColor = e.target.value;
+            hexLabel.textContent = currentColor.toUpperCase();
+        });
+
+        // Clear current frame
+        clearBtn.addEventListener('click', () => {
+            if (isPlaying) return;
+            frames[currentFrameIndex] = createEmptyGrid(gridSize);
+            updateCanvasDisplay();
+            updateThumbnail(currentFrameIndex);
+        });
+
+        // Copy current frame data into the next frame (or create one if last)
+        copyBtn.addEventListener('click', () => {
+            if (isPlaying) return;
+            const clonedGrid = frames[currentFrameIndex].map(row => [...row]);
+            
+            if (currentFrameIndex === frames.length - 1) {
+                frames.push(clonedGrid);
+                currentFrameIndex = frames.length - 1;
+            } else {
+                currentFrameIndex++;
+                frames[currentFrameIndex] = clonedGrid;
+            }
+            renderTimeline();
+            updateCanvasDisplay();
+        });
+
+        // Resize Grid
+        resizeBtn.addEventListener('click', () => {
+            if (isPlaying) return;
+            const newSize = parseInt(gridSizeInput.value);
+            if (isNaN(newSize) || newSize < 4 || newSize > 128) {
+                alert('Please enter a grid resolution between 4 and 128.');
+                return;
+            }
+
+            if (confirm('Resizing the grid will clear all your frames. Do you want to proceed?')) {
+                gridSize = newSize;
+                initApp();
+            }
+        });
+
+        onionSkinToggle.addEventListener('change', (e) => {
+            onionSkinEnabled = e.target.checked;
+            updateCanvasDisplay();
+        });
+
+        // Timeline & Frames Management
+        function renderTimeline() {
+            const thumbs = framesContainer.querySelectorAll('.frame-thumb');
+            thumbs.forEach(t => t.remove());
+
+            frames.forEach((frameData, index) => {
+                const thumb = document.createElement('div');
+                thumb.classList.add('frame-thumb');
+                if (index === currentFrameIndex) thumb.classList.add('active');
+
+                const canvas = document.createElement('canvas');
+                canvas.width = gridSize;
+                canvas.height = gridSize;
+                drawGridToCanvas(frameData, canvas);
+                thumb.appendChild(canvas);
+
+                const numSpan = document.createElement('span');
+                numSpan.classList.add('frame-number');
+                numSpan.textContent = index + 1;
+                thumb.appendChild(numSpan);
+
+                if (frames.length > 1) {
+                    const delBtn = document.createElement('button');
+                    delBtn.classList.add('delete-frame-btn');
+                    delBtn.innerHTML = '✕';
+                    delBtn.title = 'Delete frame';
+                    delBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        deleteFrame(index);
+                    });
+                    thumb.appendChild(delBtn);
+                }
+
+                thumb.addEventListener('click', () => {
+                    if (isPlaying) return;
+                    currentFrameIndex = index;
+                    updateCanvasDisplay();
+                    highlightActiveThumbnail();
+                });
+
+                framesContainer.insertBefore(thumb, addFrameBtn);
+            });
+
+            frameCounter.textContent = `Frame ${currentFrameIndex + 1} of ${frames.length}`;
+        }
+
+        function updateThumbnail(index) {
+            const thumbs = framesContainer.querySelectorAll('.frame-thumb');
+            if (thumbs[index]) {
+                const canvas = thumbs[index].querySelector('canvas');
+                if (canvas) {
+                    drawGridToCanvas(frames[index], canvas);
+                }
+            }
+        }
+
+        function highlightActiveThumbnail() {
+            const thumbs = framesContainer.querySelectorAll('.frame-thumb');
+            thumbs.forEach((t, idx) => {
+                if (idx === currentFrameIndex) {
+                    t.classList.add('active');
+                } else {
+                    t.classList.remove('active');
+                }
+            });
+            frameCounter.textContent = `Frame ${currentFrameIndex + 1} of ${frames.length}`;
+        }
+
+        function drawGridToCanvas(gridData, canvasTarget) {
+            const ctx = canvasTarget.getContext('2d');
+            ctx.clearRect(0, 0, gridSize, gridSize);
+            for (let y = 0; y < gridSize; y++) {
+                for (let x = 0; x < gridSize; x++) {
+                    const color = gridData[y][x];
+                    if (color) {
+                        ctx.fillStyle = color;
+                        ctx.fillRect(x, y, 1, 1);
+                    }
+                }
+            }
+        }
+
+        addFrameBtn.addEventListener('click', () => {
+            if (isPlaying) return;
+            frames.push(createEmptyGrid(gridSize));
+            currentFrameIndex = frames.length - 1;
+            renderTimeline();
+            updateCanvasDisplay();
+        });
+
+        function deleteFrame(index) {
+            if (frames.length <= 1) return;
+            frames.splice(index, 1);
+            if (currentFrameIndex >= frames.length) {
+                currentFrameIndex = frames.length - 1;
+            }
+            renderTimeline();
+            updateCanvasDisplay();
+        }
+
+        // Animation Playback
+        playBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                stopAnimation();
+            } else {
+                startAnimation();
+            }
+        });
+
+        function startAnimation() {
+            if (frames.length < 2) {
+                alert('Add at least 2 frames to play an animation!');
+                return;
+            }
+            isPlaying = true;
+            playBtn.textContent = '⏹ Stop Animation';
+            playBtn.className = 'danger';
+            setTool('pen');
+            updateCanvasDisplay(); // Refresh display to hide onion skin immediately
+
+            const fps = parseInt(fpsInput.value) || 6;
+            const intervalMs = 1000 / fps;
+
+            playInterval = setInterval(() => {
+                currentFrameIndex = (currentFrameIndex + 1) % frames.length;
+                updateCanvasDisplay();
+                highlightActiveThumbnail();
+            }, intervalMs);
+        }
+
+        function stopAnimation() {
+            isPlaying = false;
+            playBtn.textContent = '▶ Play Animation';
+            playBtn.className = 'primary';
+            clearInterval(playInterval);
+            playInterval = null;
+            updateCanvasDisplay(); // Restore onion skin if enabled
+        }
+
+        fpsInput.addEventListener('change', (e) => {
+            let val = parseInt(e.target.value);
+            if (isNaN(val) || val < 1) val = 1;
+            if (val > 30) val = 30;
+            currentFps = val;
+            fpsInput.value = val;
+
+            if (isPlaying) {
+                stopAnimation();
+                startAnimation();
+            }
+        });
+
+        // Run application on load
+        initApp();
+    </script>
+</body>
+</html>
